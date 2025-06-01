@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Login/Sign Up</title>
+    <link rel="canonical" href="https://promptsincreibles.com/auth/login.html">
+    <link rel="stylesheet" href="../assets/css/navbar.css">
+    <link rel="stylesheet" href="../assets/css/auth/login.css">
+    <link rel="stylesheet" href="../assets/css/popup-notify/popup-notify.css">
+    
+</head>
+<body>
+
+<div id="content-container">
+    <div id="authScreen">
+        <div class="auth-widget" id="loginWidget">
+            <h2>Login</h2>
+            <label for="loginEmail">Email</label>
+            <input type="email" id="loginEmail" placeholder="Email">
+
+            <label for="loginPassword">Password</label>
+            <div class="password-container">
+                <input type="password" id="loginPassword" placeholder="Enter your password">
+                <button class="toggle-password"><img id="loginEyeImg" src="../assets/png/eye.png" alt="Mostrar contraseña" /></button>
+            </div>
+
+            <button id="signInButton" class="auth-button primary">Login</button>
+            <p class="switch-auth">Don't have an account? <a href="#" id="showSignUp">Sign Up</a></p>
+        </div>
+
+        <div class="auth-widget hidden" id="signUpWidget">
+            <h2>Sign Up</h2>
+            <label for="signUpEmail">Email</label>
+            <input type="email" id="signUpEmail" placeholder="Enter your email">
+
+            <label for="signUpPassword">Password</label>
+            <div class="password-container">
+                <input type="password" id="signUpPassword" placeholder="Choose a password (min. 6 characters)">
+                <button class="toggle-password"><img id="signUpEyeImg" src="../assets/png/eye.png" alt="Mostrar contraseña" /></button>
+            </div>
+
+            <label for="confirmPassword">Confirm Password</label>
+            <div class="password-container">
+                <input type="password" id="confirmPassword" placeholder="Confirm your password">
+            </div>
+
+            <button id="signUpButton" class="auth-button primary">Sign Up</button>
+            <p class="switch-auth">Already have an account? <a href="#" id="showLogin">Login</a></p>
+        </div>
+    </div>
+</div>
+
+<script src="../code/popup-notify.js"></script>
+<script type="module" src="../code/navbar.js" defer></script>
+<script type="module" src="../code/auth.js"></script> 
+</body>
+</html>

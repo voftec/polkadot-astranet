@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UID Generator</title>
+  <link rel="stylesheet" href="../assets/css/popup-notify/popup-notify.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background: #f4f4f4;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+    input {
+      width: 300px;
+      font-size: 16px;
+      padding: 8px;
+      margin-top: 20px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h1>Generate UID</h1>
+  <input type="text" id="uidOutput" readonly />
+  <button onclick="generateAndCopyID()">Generate and Copy</button>
+
+  <script>
+    function generateLightweightID(length = 13) {
+      const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-';
+      let id = '';
+      for (let i = 0; i < length; i++) {
+        id += chars[Math.floor(Math.random() * chars.length)];
+      }
+      return id;
+    }
+
+    function generateAndCopyID() {
+      const uid = generateLightweightID();
+      const output = document.getElementById('uidOutput');
+      output.value = uid;
+      output.select();
+      output.setSelectionRange(0, 99999); // For mobile devices
+      document.execCommand('copy');
+      popupNotifier.success('UID copiado al portapapeles: ' + uid, 'UID Copiado');
+    }
+  </script>
+<script src="../code/popup-notify.js"></script>
+</body>
+</html>

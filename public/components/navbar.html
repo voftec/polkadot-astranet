@@ -1,0 +1,43 @@
+<!-- Navigation Bar Component -->
+<nav class="bg-[#111418] border-b border-[#3c4753]">
+    <div class="max-w-[1200px] mx-auto px-4">
+        <div class="flex items-center justify-between h-16">
+            <!-- Left side: Logo and Title -->
+            <div class="flex items-center">
+                <div class="w-10 h-10 mr-4">
+                    <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkhXGmZ423C1CGDao1K15ZBYn7HBX8yGf_l25J0F8YS5DfjmwI9jbCoUTxO7-6a31PFGa8NBcMNfO3y-Z1O1GGnxGN9i3wXNNCfp-4uX3I3qHcs9zTxF2IX73Cn57pjZZkcZ47qDIX8NB8Q9qI6H8YRKOaOsg4a8NrWBuGgVPR5q4-khNWerZBnaXv5K2QWeawFlZi1KwjtF9zXQT6bW35CErrheQFyG6RRdb7V65W5OndPeaMULV9ZDoPNNAwyEvIpKZ1sGMtAXIi" 
+                         alt="Polkadot Astranet Logo" 
+                         class="w-full h-full object-cover rounded-lg">
+                </div>
+                <span class="text-white text-lg font-bold">Polkadot Astranet</span>
+            </div>
+
+            <!-- Right side: Navigation Links -->
+            <div class="flex items-center space-x-4">
+                <a href="/" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Home</a>
+                <a href="/astranet/chat.html" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Chat</a>
+                <a href="/datasets/gallery.html" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Datasets</a>
+                <a href="/code/hackatonGuide.html" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Guide</a>
+                <a href="/roadmap/roadmap.html" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Roadmap</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<script>
+// Function to inject the navigation bar
+function injectNavbar() {
+    fetch('/components/navbar.html')
+        .then(response => response.text())
+        .then(data => {
+            const navbarContainer = document.getElementById('navbar-container');
+            if (navbarContainer) {
+                navbarContainer.innerHTML = data;
+            }
+        })
+        .catch(error => console.error('Error loading navbar:', error));
+}
+
+// Call the function when the page loads
+document.addEventListener('DOMContentLoaded', injectNavbar);
+</script> 

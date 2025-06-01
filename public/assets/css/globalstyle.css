@@ -1,0 +1,68 @@
+:root {
+    /* Core Brand Colors - Ensure these are defined and used by navbar.css if needed */
+    --nasa-blue: #0a84ff;          /* Example */
+    --nasa-red: #ff3b30;           /* Example */
+    --nasa-bg: #f2f2f7;            /* Example */
+    --nasa-text: #1c1c1e;          /* Example */
+    --white: #ffffff;              /* Example */
+    --dark: #000000;               /* Example */
+    --light-gray: #d1d1d6;         /* Example */
+  
+    /* Header (Consider if these are for the general site header or specifically navbar) */
+    /* If navbar.css defines its own background/text color, these might not be needed for it */
+    --header-text: var(--white);
+    --header-bg: var(--nasa-blue);
+  
+    /* Inputs & Buttons - Check if these general button styles conflict with .navbar-right button */
+    /* --input-border: #d1d1d6; */
+    /* --input-focus: var(--nasa-blue); */
+    /* --eye-bg: #e5e5ea; */
+    /* --eye-hover: #d1d1d6; */
+  
+    /* --login-bg: var(--nasa-blue); */
+    /* --login-hover: #0060df; */
+    /* --signup-border: var(--nasa-red); */
+    /* --signup-hover: #c1271d; */
+}
+
+/* Remove dark/light mode overrides if they also redefine general button/nav styles that conflict */
+/* @media (prefers-color-scheme: dark) { :root { ... } } */
+/* @media (prefers-color-scheme: light) { :root { ... } } */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; /* Base font */
+    color: var(--nasa-text);
+    background-color: var(--nasa-bg);
+    /* z-index: 0; */ /* Generally not needed on body unless for specific stacking context reasons */
+}
+
+/* General nav styles could interfere. If you have them, make them less specific than .navbar in navbar.css */
+/* Example of a potentially interfering general style:
+nav {
+    background-color: lightgrey;
+    padding: 5px;
+}
+button {
+    background-color: grey;
+    color: white;
+}
+*/
+
+.hidden {
+    display: none !important; /* Or preferably: display: none; if !important is not strictly needed elsewhere */
+}
+
+.visible {
+    display: block !important; /* Or preferably: display: block; */
+}
+
+.hidden {
+    display: none;
+}
+  

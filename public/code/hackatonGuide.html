@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Full-Stack Polkadot dApp Development Guide for Hackathons</title>
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+        .prose h1, .prose h2, .prose h3 {
+            color: #374151; /* Tailwind gray-700 */
+        }
+        .prose code::before, .prose code::after {
+            content: '';
+        }
+        .prose pre {
+            background-color: #f3f4f6; /* Tailwind gray-100 */
+            border: 1px solid #e5e7eb; /* Tailwind gray-200 */
+            border-radius: 0.375rem; /* rounded-md */
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+    <!-- Navigation Bar Container -->
+    <div id="navbar-container"></div>
+    
+    <div class="container mx-auto p-4 sm:p-8">
+        <article class="prose prose-lg lg:prose-xl max-w-none bg-white p-6 sm:p-10 rounded-lg shadow-md">
+            <header class="mb-12 border-b pb-8">
+                <h1 class="text-4xl sm:text-5xl font-bold tracking-tight text-center text-purple-700">Full-Stack Polkadot dApp Development: A Hackathon Guide</h1>
+                <p class="text-center text-xl text-gray-600 mt-4">Crafting Decentralized Applications with Polkadot, Firebase, and a Custom JS Framework</p>
+            </header>
+
+            <section id="introduction">
+                <h2>1. Introduction</h2>
+                <p>Welcome to the fast-paced world of hackathons! This guide is designed to help you navigate the development of a full-stack decentralized application (dApp) on the Polkadot network. We'll cover essential concepts, tools, and strategies to help you build a compelling project within the limited timeframe.</p>
+                
+                <h3>1.1 Polkadot Overview</h3>
+                <p>Polkadot is a next-generation blockchain protocol that enables different blockchains to connect and communicate with each other in a secure, scalable, and interoperable way. It features a central <strong>Relay Chain</strong> that provides shared security and consensus, and multiple parallel blockchains called <strong>parachains</strong> that can have their own specialized logic and host dApps.</p>
+
+                <h3>1.2 Project Goal</h3>
+                <p>The primary objective in a hackathon context is to build a functional Minimum Viable Product (MVP) that demonstrates the core idea of your dApp. This typically involves integrating frontend, backend (if necessary), and smart contract components.</p>
+
+                <h3>1.3 Full-Stack Components</h3>
+                <p>A full-stack dApp generally comprises:</p>
+                <ul>
+                    <li><strong>Smart Contracts:</strong> On-chain logic that defines the rules and state transitions of your dApp.</li>
+                    <li><strong>Backend:</strong> Off-chain services for data storage, user authentication, or complex computations not suitable for the blockchain. Firebase is a popular choice for rapid development.</li>
+                    <li><strong>Frontend:</strong> The user interface (UI) that users interact with, typically built with HTML, CSS, and JavaScript.</li>
+                </ul>
+
+                <h3>1.4 Hackathon Context (Nerdcamp Focus)</h3>
+                <p>Hackathons like Nerdcamp are about rapid prototyping, innovation, and demonstrating core functionality. For the MVP category, a smart contract plus a technical roadmap explaining future development can be sufficient. Focus on solving a real problem and clearly articulate *why* blockchain, and specifically Polkadot, is the right choice for your solution. Aim for a complete application (frontend, backend, smart contract) if possible, as this often aligns with top prize criteria. Showcasing innovative use of Polkadot technologies, like experimenting with PolkaVM, can also be a distinguishing factor.</p>
+            </section>
+
+            <section id="core-technologies">
+                <h2>2. Core Technologies Overview</h2>
+                
+                <h3>2.1 Polkadot & Substrate Basics</h3>
+                <ul>
+                    <li><strong>Substrate:</strong> A modular framework for building custom blockchains (parachains or solo chains) that can connect to Polkadot. It provides core components like consensus, networking, and a runtime execution environment.</li>
+                    <li><strong>Relay Chain:</strong> The heart of Polkadot, providing shared security, consensus (Nominated Proof-of-Stake - NPoS), and interoperability to connected parachains.</li>
+                    <li><strong>Parachains:</strong> Application-specific blockchains that run in parallel, benefiting from the Relay Chain's security and interoperability. They host dApps and custom logic.</li>
+                    <li><strong>Transactions (Extrinsics):</strong> Operations that can change the state of the blockchain (e.g., transferring tokens, calling a smart contract function).</li>
+                    <li><strong>Queries (RPC Calls):</strong> Read-only operations that fetch data from the blockchain without changing its state.</li>
+                </ul>
+
+                <h3>2.2 Smart Contracts on Polkadot</h3>
+                <p>Polkadot supports various smart contract environments:</p>
+                
+                <h4>2.2.1 ink! (Rust/WASM)</h4>
+                <ul>
+                    <li><strong>Description:</strong> The primary, Rust-based embedded Domain Specific Language (eDSL) for writing smart contracts that compile to WebAssembly (WASM).</li>
+                    <li><strong>Execution:</strong> Runs on Substrate chains via <code>pallet-contracts</code>.</li>
+                    <li><strong>Status:</strong> Established, production-ready on many parachains. This is generally the prioritized approach for robust Polkadot smart contracts.</li>
+                </ul>
+
+                <h4>2.2.2 PolkaVM (RISC-V) - Experimental</h4>
+                <ul>
+                    <li><strong>Description:</strong> An emerging, high-performance, RISC-V based virtual machine developed by Parity Technologies, aiming for improved performance and security. Its architecture includes features like register-based operations, a Harvard architecture, and OS-level sandboxing.</li>
+                    <li><strong>Status:</strong> <strong>Highly Experimental</strong> and under active development. It's currently testable on the Westend Asset Hub. Not production-ready for mainnet (expected Kusama Q2 2025, Polkadot Q3 2025). Expect breaking changes.</li>
+                    <li><strong>Solidity Compatibility (via Revive/RESOLC):</strong> PolkaVM itself doesn't run EVM bytecode. Solidity contracts can be supported through a translation layer:
+                        <ol>
+                            <li>Compile Solidity (`solc`) to YUL (an intermediate representation).</li>
+                            <li>Recompile YUL to RISC-V bytecode (PolkaVM compatible) using the <strong>Revive toolchain (RESOLC compiler)</strong>.</li>
+                        </ol>
+                    </li>
+                    <li><strong>Execution:</strong> Requires the <strong>Revive Pallet</strong> on the Substrate chain (e.g., Westend Asset Hub).</li>
+                    <li><strong>Frontend Interaction:</strong> Achieved via an <strong>Ethereum JSON RPC proxy</strong>. This proxy simulates a standard EVM interface, allowing tools like MetaMask, Ethers.js, or Viem to interact with PolkaVM contracts deployed via Revive.</li>
+                    <li><strong>Reference:</strong> <a href="https://github.com/paritytech/polkavm" target="_blank" rel="noopener noreferrer">PolkaVM GitHub</a></li>
+                </ul>
+
+                <h4>2.2.3 EVM Compatibility (Frontier)</h4>
+                <ul>
+                    <li><strong>Description:</strong> Allows standard Solidity/Vyper contracts (compiled to EVM bytecode) to run on Polkadot parachains.</li>
+                    <li><strong>Execution:</strong> Uses the Frontier pallet, which provides an EVM-compatible environment. Prevalent on chains like Moonbeam, Astar, and Acala.</li>
+                    <li><strong>Status:</strong> Mature and widely adopted, offering a familiar environment for Ethereum developers.</li>
+                </ul>
+
+                <h3>2.3 Frontend: HTML, CSS, JavaScript</h3>
+                <ul>
+                    <li><strong>Standard Web Stack:</strong> Forms the foundation of your dApp's user interface.</li>
+                    <li><strong>Role of Polkadot.js:</strong> The primary JavaScript library ecosystem for interacting with Polkadot:
+                        <ul>
+                            <li><code>@polkadot/api</code>: Core library for connecting to Polkadot nodes, making RPC calls, submitting extrinsics, and interacting with ink!/WASM smart contracts.</li>
+                            <li><code>@polkadot/extension-dapp</code>: Facilitates integration with browser-based Polkadot wallets (like Polkadot.js Extension) for account management and transaction signing.</li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <h3>2.4 Backend: Firebase</h3>
+                <ul>
+                    <li><strong>Purpose:</strong> Provides off-chain services that complement the decentralized aspects of your dApp. Essential for features like user profiles, complex data queries not suitable for on-chain, or event-driven actions.</li>
+                    <li><strong>Key Services for Hackathons:</strong>
+                        <ul>
+                            <li><strong>Firebase Authentication:</strong> Easy user identity management (email/password, social logins).</li>
+                            <li><strong>Cloud Firestore / Realtime Database:</strong> Scalable NoSQL databases for storing off-chain data. Firestore is generally preferred for complex queries, while Realtime Database excels at real-time sync.</li>
+                            <li><strong>Cloud Functions:</strong> Serverless functions (Node.js, Python, etc.) for backend logic, API endpoints, or tasks like relaying transactions or listening to on-chain events (potentially with a server-side wallet).</li>
+                        </ul>
+                    </li>
+                    <li><strong>Advantages for Hackathons:</strong> Rapid setup, managed infrastructure, generous free tier (Spark Plan).</li>
+                    <li><strong>Considerations:</strong> Firebase is a centralized service. Clearly define which parts of your dApp are decentralized (on-chain) versus centralized (Firebase).</li>
+                </ul>
+
+                <h3>2.5 Proposed JavaScript Framework (`polka-web-integrate-framework` Concept)</h3>
+                <p>For a hackathon, building a full-fledged framework is ambitious. However, conceptualizing or implementing a simplified version can significantly streamline Polkadot integration into your web app.</p>
+                <ul>
+                    <li><strong>Purpose:</strong> To abstract the complexities of Polkadot.js and other libraries, provide a unified interface for different contract types (ink!, EVM, PolkaVM via EVM proxy), and simplify chain/wallet management.</li>
+                    <li><strong>Key Conceptual Components:</strong>
+                        <ul>
+                            <li><code>ChainRegistry</code>: Manages network configurations (RPC endpoints, chain type like <code>ink</code>, <code>evm</code>, <code>polkavm</code>).</li>
+                            <li><code>NetworkManager</code>: Handles connections to Polkadot nodes using <code>@polkadot/api</code>.</li>
+                            <li><code>WalletManager</code>: Integrates browser extensions (Polkadot.js Extension, MetaMask for EVM-compatible interactions).</li>
+                            <li><code>AccountManager</code>: Fetches account balances and other user-specific on-chain data.</li>
+                            <li><code>ContractManager</code>: A crucial abstraction layer.
+                                <ul>
+                                    <li>Detects contract/chain type (e.g., <code>ink</code> vs. <code>evm</code>/<code>polkavm</code> via proxy).</li>
+                                    <li>Uses <code>@polkadot/api-contract</code> for ink! interactions.</li>
+                                    <li>Uses libraries like <code>ethers.js</code> or <code>viem</code> for EVM/PolkaVM (via EVM RPC proxy) interactions.</li>
+                                </ul>
+                            </li>
+                            <li><code>ErrorManager</code>: Centralized error handling.</li>
+                            <li><code>Utils</code>: Helper functions (e.g., formatting addresses, balances).</li>
+                        </ul>
+                    </li>
+                    <li><strong>Benefits:</strong> Cleaner frontend code, easier switching between chains/contract types, faster development once the core is set up.</li>
+                </ul>
+            </section>
+
+            <section id="development-workflow">
+                <h2>3. Development Workflow (MVP Focus for Hackathon)</h2>
+                <p>This section outlines a practical, step-by-step approach to building your dApp's core features, focusing on an MVP.</p>
+
+                <h3>3.1 Setting up the Environment</h3>
+                <ul>
+                    <li><strong>Node.js & Package Manager:</strong> Ensure Node.js (LTS version) and npm (or yarn) are installed.</li>
+                    <li><strong>Polkadot Tooling:</strong>
+                        <ul>
+                            <li>Install client-side libraries: <code>npm install @polkadot/api @polkadot/extension-dapp</code> (or yarn add).</li>
+                            <li>For ink! development: Install Rust and <code>cargo-contract</code>: <code>cargo install cargo-contract --force</code>.</li>
+                            <li>For PolkaVM/Solidity (experimental): Set up the Revive toolchain (RESOLC). Follow instructions from PolkaVM/Revive documentation. This might involve cloning repositories and building from source.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Firebase Setup:</strong>
+                        <ul>
+                            <li>Create a Firebase project at <a href="https://console.firebase.google.com/" target="_blank" rel="noopener noreferrer">Firebase Console</a>.</li>
+                            <li>Install Firebase CLI: <code>npm install -g firebase-tools</code>. Log in with <code>firebase login</code>.</li>
+                            <li>Initialize Firebase in your project: <code>firebase init</code> (select Firestore, Functions, Authentication as needed).</li>
+                            <li>Install Firebase client SDK: <code>npm install firebase</code>.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Frontend Structure:</strong> Create basic <code>index.html</code>, <code>style.css</code>, and <code>script.js</code> files. For larger projects, consider a simple bundler like Parcel or Vite for easier module management, but for a quick hackathon setup, vanilla JS with ES modules can work.</li>
+                </ul>
+
+                <h3>3.2 Smart Contract Development</h3>
+                <p>Focus on a simple contract demonstrating core logic.</p>
+
+                <h4>3.2.1 Option 1: ink! (Rust)</h4>
+                <p>A simple flipper contract example:</p>
+                <pre><code class="language-rust">
+#![cfg_attr(not(feature = "std"), no_std, no_main)]
+
+#[ink::contract]
+mod flipper {
+    #[ink(storage)]
+    pub struct Flipper {
+        value: bool,
+    }
+
+    impl Flipper {
+        #[ink(constructor)]
+        pub fn new(init_value: bool) -> Self {
+            Self { value: init_value }
+        }
+
+        #[ink(message)]
+        pub fn flip(&mut self) {
+            self.value = !self.value;
+        }
+
+        #[ink(message)]
+        pub fn get(&self) -> bool {
+            self.value
+        }
+    }
+}
+                </code></pre>
+                <p>Compilation: Navigate to your contract directory and run <code>cargo contract build</code>. This produces a <code>.wasm</code> file (bytecode) and a <code>.json</code> file (metadata/ABI).</p>
+
+                <h4>3.2.2 Option 2: PolkaVM with Solidity (Experimental)</h4>
+                <p>A simple counter contract in Solidity:</p>
+                <pre><code class="language-solidity">
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract Counter {
+    uint256 public count;
+
+    function increment() public {
+        count += 1;
+    }
+
+    function getCount() public view returns (uint256) {
+        return count;
+    }
+}
+                </code></pre>
+                <p>Compilation: Use the <code>resolc</code> compiler (part of the Revive toolchain) to compile <code>Counter.sol</code> to RISC-V bytecode and generate its ABI (<code>.json</code>). The exact commands will depend on the Revive toolchain setup.</p>
+                <p><strong>Note:</strong> Developing with PolkaVM/Solidity is cutting-edge and highly experimental. Be prepared for challenges and potential instability. It's recommended for showcasing innovation, but have ink! as a fallback for core functionality if PolkaVM proves too difficult within the hackathon timeframe.</p>
+
+                <h4>3.2.3 Deploying to a Testnet</h4>
+                <ul>
+                    <li><strong>Choose a Testnet:</strong>
+                        <ul>
+                            <li>For PolkaVM/Revive: <strong>Westend Asset Hub</strong> is the current primary testbed. You'll need its EVM RPC endpoint.</li>
+                            <li>For ink!: Rococo Contracts parachain, Shibuya (Astar testnet), or a local Substrate node with <code>pallet-contracts</code>.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Deployment Methods:</strong>
+                        <ul>
+                            <li><strong>Polkadot.js Apps UI:</strong> Connect to the relevant testnet RPC (<a href="https://polkadot.js.org/apps/" target="_blank" rel="noopener noreferrer">polkadot.js.org/apps/</a>). Use the "Contracts" section to upload Wasm/bytecode and instantiate.</li>
+                            <li><strong><code>cargo contract</code> CLI (for ink!):</strong> <code>cargo contract upload --suri //YourDevAccountSeed</code> and <code>cargo contract instantiate --suri //YourDevAccountSeed ...</code>.</li>
+                            <li><strong>Programmatic (Advanced/Framework):</strong> Use <code>@polkadot/api-contract</code> (for ink!) or <code>ethers.js</code>/<code>viem</code> (for EVM/PolkaVM via proxy) in a script.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Note Contract Address:</strong> After deployment, carefully note the contract's address. You'll need it for frontend interaction.</li>
+                </ul>
+
+                <h3>3.3 Backend Integration (Firebase)</h3>
+                
+                <h4>3.3.1 User Authentication</h4>
+                <ul>
+                    <li>Enable desired authentication providers (e.g., Email/Password, Google) in the Firebase console (Authentication -> Sign-in method).</li>
+                    <li>Implement basic signup/login/logout flows in your frontend using the Firebase Auth SDK.
+                        <pre><code class="language-javascript">
+// Example: Firebase Email/Password Signup
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+
+const auth = getAuth();
+createUserWithEmailAndPassword(auth, email, password)
+  .then((userCredential) => {
+    const user = userCredential.user;
+    console.log("User signed up:", user);
+  })
+  .catch((error) => {
+    console.error("Signup error:", error.message);
+  });
+                        </code></pre>
+                    </li>
+                    <li>(Optional) Link Firebase User ID (UID) to a Polkadot address by storing this mapping in Firestore.</li>
+                </ul>
+
+                <h4>3.3.2 Storing/Retrieving Off-chain Data</h4>
+                <ul>
+                    <li>Design a simple data model in Firestore (e.g., a <code>users</code> collection where documents are keyed by Firebase UID, storing profile information or dApp-specific preferences).</li>
+                    <li>Implement read/write operations from your frontend or Cloud Functions using the Firebase SDKs.
+                        <pre><code class="language-javascript">
+// Example: Writing to Firestore
+import { getFirestore, doc, setDoc } from "firebase/firestore";
+
+const db = getFirestore();
+async function saveUserData(userId, data) {
+  await setDoc(doc(db, "users", userId), data);
+  console.log("User data saved");
+}
+                        </code></pre>
+                    </li>
+                </ul>
+
+                <h4>3.3.3 Firebase Cloud Functions for Middleware</h4>
+                <p>Cloud Functions can act as a secure intermediary between your frontend and the Polkadot network, or handle complex off-chain logic.</p>
+                <p>Example: A simple HTTP-triggered function (in <code>functions/index.js</code>):</p>
+                <pre><code class="language-javascript">
+const functions = require("firebase-functions");
+const { ApiPromise, WsProvider } = require("@polkadot/api"); // Install in functions/package.json
+
+// Consider initializing ApiPromise globally or on first call for efficiency
+// const wsProvider = new WsProvider('wss://westend-rpc.polkadot.io'); // Example RPC
+// let polkadotApi;
+
+exports.getChainInfo = functions.https.onCall(async (data, context) => {
+  // if (!polkadotApi || !polkadotApi.isConnected) {
+  //   polkadotApi = await ApiPromise.create({ provider: wsProvider });
+  // }
+  // const chain = await polkadotApi.rpc.system.chain();
+  // const nodeName = await polkadotApi.rpc.system.name();
+  // const nodeVersion = await polkadotApi.rpc.system.version();
+  // return { chain: chain.toString(), nodeName: nodeName.toString(), nodeVersion: nodeVersion.toString() };
+  
+  // For hackathon simplicity and to avoid long cold starts or managing global state:
+  // Initialize provider and API within the function for each call, or use a simpler query.
+  // This is less efficient but more robust for single-shot functions.
+  // Real applications would manage the ApiPromise instance better.
+  
+  try {
+    const provider = new WsProvider('wss://rpc.polkadot.io'); // Generic Polkadot RPC
+    const api = await ApiPromise.create({ provider });
+    const chain = await api.rpc.system.chain();
+    await provider.disconnect(); // Important to disconnect
+    return { chainName: chain.toString() };
+  } catch (error) {
+    console.error("Error connecting to Polkadot:", error);
+    throw new functions.https.HttpsError('internal', 'Failed to connect to Polkadot network.');
+  }
+});
+                </code></pre>
+                <p>Deploy functions using <code>firebase deploy --only functions</code>. Remember to install necessary dependencies (like <code>@polkadot/api</code> or <code>ethers</code>) in your <code>functions/package.json</code>.</p>
+
+                <h3>3.4 Frontend Development</h3>
+
+                <h4>3.4.1 Integrating the Custom JavaScript Framework (or Polkadot.js Directly)</h4>
+                <p>For a hackathon, you might implement a simplified version of the <code>polka-web-integrate-framework</code> as a set of helper functions or a single class in your main JavaScript file.</p>
+                <p>If using Polkadot.js directly:</p>
+                <ul>
+                    <li>Initialize <code>@polkadot/api</code> to connect to a node.</li>
+                    <li>Use <code>@polkadot/extension-dapp</code> to detect and enable browser wallets.</li>
+                    <li>For PolkaVM/EVM interactions via an RPC proxy, you'd use <code>ethers.js</code> or <code>viem</code> instead of <code>@polkadot/api-contract</code>.</li>
+                </ul>
+
+                <h4>3.4.2 Connecting to Polkadot Network & Wallet</h4>
+                <pre><code class="language-javascript">
+// Conceptual: Using a simplified framework structure
+// Assume 'polkadotFramework' is your simplified framework object/module
+
+// In your main script.js
+import { ApiPromise, WsProvider } from '@polkadot/api';
+import { web3Accounts, web3Enable } from '@polkadot/extension-dapp';
+
+// Simplified conceptual framework structure
+const polkadotFramework = {
+    api: null,
+    selectedAccount: null,
+    accounts: [],
+
+    async connectNode(rpcUrl = 'wss://westend-rpc.polkadot.io') { // Default to Westend for example
+        const provider = new WsProvider(rpcUrl);
+        this.api = await ApiPromise.create({ provider });
+        console.log(`Connected to node: ${rpcUrl}, chain: ${await this.api.rpc.system.chain()}`);
+    },
+
+    async connectWallet() {
+        const extensions = await web3Enable('My Polkadot dApp');
+        if (extensions.length === 0) {
+            alert('No Polkadot wallet extension found. Please install Polkadot.js extension or similar.');
+            return;
+        }
+        this.accounts = await web3Accounts();
+        if (this.accounts.length > 0) {
+            this.selectedAccount = this.accounts[0]; // Select first account by default
+            console.log('Wallet connected, accounts:', this.accounts);
+            // Update UI to show accounts, allow selection
+        } else {
+            alert('No accounts found. Please create an account in your Polkadot wallet.');
+        }
+    },
+    
+    // Add methods for contract interaction, balance fetching etc.
+    async getBalance() {
+        if (!this.api || !this.selectedAccount) return 'N/A';
+        const { data: { free: balance } } = await this.api.query.system.account(this.selectedAccount.address);
+        return balance.toHuman();
+    }
+};
+
+// Example usage:
+// document.getElementById('connectNodeBtn').addEventListener('click', async () => {
+//   await polkadotFramework.connectNode('YOUR_CHOSEN_RPC_URL'); // e.g. Westend Asset Hub RPC for PolkaVM
+//   // Update UI
+// });
+// document.getElementById('connectWalletBtn').addEventListener('click', async () => {
+//   await polkadotFramework.connectWallet();
+//   // Update UI with accounts, balance
+// });
+                </code></pre>
+
+                <h4>3.4.3 Interacting with Smart Contracts</h4>
+                <p>For ink! contracts (using <code>@polkadot/api-contract</code>):</p>
+                <pre><code class="language-javascript">
+import { ContractPromise } from '@polkadot/api-contract';
+// Assuming 'polkadotFramework.api' and 'polkadotFramework.selectedAccount' are set
+// And 'contractAbi' (from .json) and 'contractAddress' are known
+
+async function queryContract(contractAbi, contractAddress) {
+    if (!polkadotFramework.api) return;
+    const contract = new ContractPromise(polkadotFramework.api, contractAbi, contractAddress);
+    
+    // Example: calling a 'get' message (read-only)
+    const { result, output } = await contract.query.get(polkadotFramework.selectedAccount.address, {
+        gasLimit: polkadotFramework.api.registry.createType('WeightV2', {
+            refTime: BigInt(10000000000), // Adjust gas appropriately
+            proofSize: BigInt(100000),   // Adjust proof size appropriately
+        }),
+        storageDepositLimit: null 
+    });
+
+    if (result.isOk) {
+        console.log('Query result:', output.toHuman());
+        return output.toHuman();
+    } else {
+        console.error('Error querying contract:', result.asErr);
+    }
+}
+
+async function executeContractTx(contractAbi, contractAddress) {
+    if (!polkadotFramework.api || !polkadotFramework.selectedAccount) return;
+    const contract = new ContractPromise(polkadotFramework.api, contractAbi, contractAddress);
+    const { web3FromSource } = await import('@polkadot/extension-dapp'); // Dynamic import
+    
+    const injector = await web3FromSource(polkadotFramework.selectedAccount.meta.source);
+
+    // Example: calling a 'flip' message (state-changing)
+    const unsub = await contract.tx
+        .flip({ 
+            gasLimit: polkadotFramework.api.registry.createType('WeightV2', {
+                refTime: BigInt(10000000000),
+                proofSize: BigInt(100000),
+            }),
+            storageDepositLimit: null 
+        })
+        .signAndSend(polkadotFramework.selectedAccount.address, { signer: injector.signer }, ({ status, events }) => {
+            if (status.isInBlock) {
+                console.log(`

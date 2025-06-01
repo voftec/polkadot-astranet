@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Polkadot Astranet - Roadmap</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/navbar.css">
+  <link rel="stylesheet" href="../assets/css/popup-notify/popup-notify.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #0f0f1a;
+      color: #e0d6ff;
+      margin: 0;
+      padding: 40px;
+    }
+    h1 {
+      text-align: center;
+      color: #a78bfa;
+      margin-bottom: 60px;
+      font-size: 2.5em;
+    }
+    .roadmap-container {
+      display: flex;
+      overflow-x: auto;
+      gap: 40px;
+      padding-bottom: 40px;
+    }
+    .stage {
+      flex: 0 0 500px;
+      background: #1c1c2b;
+      border: 2px solid #5b21b6;
+      border-radius: 12px;
+      padding: 20px;
+      position: relative;
+      text-align: left;
+    }
+    .stage h2 {
+      color: #c084fc;
+      margin-top: 0;
+    }
+    .stage table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    .stage th, .stage td {
+      padding: 10px;
+      border-bottom: 1px solid #333;
+    }
+    .stage th {
+      text-align: left;
+      color: #93c5fd;
+      font-size: 0.95em;
+    }
+    .stage td {
+      font-size: 0.9em;
+    }
+    .stage td:first-child {
+      font-weight: bold;
+      color: #e0e7ff;
+    }
+    .timeline {
+      margin-top: 80px;
+      display: flex;
+      justify-content: space-around;
+      position: relative;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      top: 10.5px;
+      left: 40px;
+      right: 40px;
+      height: 2px;
+      background-color: #5b21b6;
+      z-index: 0;
+    }
+    .timeline-stage .circle {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid #a78bfa;
+      background-color: transparent;
+    }
+    .timeline-stage.active .circle {
+      background-color: #a78bfa;
+
+    }
+    .timeline-stage p {
+      margin-top: 8px;
+      font-size: 0.9em;
+    }
+  </style>
+</head>
+<body>
+  <div class="relative flex size-full min-h-screen flex-col bg-[#0f0f1a] group/design-root overflow-x-hidden" style='font-family: "Inter", "Noto Sans", sans-serif;'>
+    <!-- Navigation Bar Container -->
+    <div id="navbar-container"></div>
+    
+    <div class="layout-container flex h-full grow flex-col">
+      <h1>Astranet Roadmap</h1>
+      <div class="roadmap-container">
+        <div class="stage stage-1">
+          <h2>✅ Tier 1 — Mature and Popular (Ideal for MVP)</h2>
+          <table>
+            <tr><th>Blockchain</th><th>Language</th><th>Feasibility</th><th>Notes</th></tr>
+            <tr><td>Ethereum</td><td>Solidity, Vyper</td><td>✅ Easy</td><td>Industry standard</td></tr>
+            <tr><td>Polygon</td><td>Solidity</td><td>✅ Easy</td><td>EVM</td></tr>
+            <tr><td>Binance Smart Chain</td><td>Solidity</td><td>✅ Easy</td><td>EVM</td></tr>
+            <tr><td>Avalanche (C-Chain)</td><td>Solidity</td><td>✅ Easy</td><td>EVM</td></tr>
+            <tr><td>Fantom</td><td>Solidity</td><td>✅ Easy</td><td>EVM</td></tr>
+            <tr><td>Moonbeam / Moonriver</td><td>Solidity + Substrate</td><td>✅ Easy</td><td>Already on Polkadot</td></tr>
+            <tr><td>Arbitrum / Optimism</td><td>Solidity</td><td>✅ Easy</td><td>Rollups, but EVM-based</td></tr>
+            <tr><td>Base (Coinbase)</td><td>Solidity</td><td>✅ Easy</td><td>EVM</td></tr>
+            <tr><td>Scroll / zkSync / Linea</td><td>Solidity</td><td>✅ Easy</td><td>zk-EVMs</td></tr>
+          </table>
+        </div>
+        <div class="stage stage-2">
+          <h2>✏️ Tier 2 — Rust-Based & Wasm-Compatible (Partially Easy)</h2>
+          <table>
+            <tr><th>Blockchain</th><th>Language</th><th>Feasibility</th><th>Notes</th></tr>
+            <tr><td>NEAR</td><td>Rust, AssemblyScript</td><td>✅ Easy</td><td>Compatible with Substrate logic</td></tr>
+            <tr><td>Cosmos</td><td>CosmWasm (Rust)</td><td>🟡 Medium</td><td>Needs mapping, but feasible</td></tr>
+            <tr><td>Solana</td><td>Rust (Anchor)</td><td>🟡 Medium</td><td>Parallel runtime, but shared base language</td></tr>
+            <tr><td>Oasis</td><td>Rust (Parcel SDK)</td><td>⚠️ Limited</td><td>Confidential compute, niche use</td></tr>
+          </table>
+        </div>
+        <div class="stage stage-3">
+          <h2>⚠️ Tier 3 — Harder to Translate (Functional / Stack-Based / ZK)</h2>
+          <table>
+            <tr><th>Blockchain</th><th>Language</th><th>Feasibility</th><th>Notes</th></tr>
+            <tr><td>Cardano</td><td>Plutus (Haskell)</td><td>⚠️ Hard</td><td>Functional, UTXO model</td></tr>
+            <tr><td>Tezos</td><td>Michelson / SmartPy</td><td>⚠️ Hard</td><td>Stack-based VM</td></tr>
+            <tr><td>Algorand</td><td>TEAL / PyTeal</td><td>⚠️ Hard</td><td>Assembly-like</td></tr>
+            <tr><td>StarkNet</td><td>Cairo</td><td>🔴 Very Hard</td><td>ZK-specific, non-standard execution</td></tr>
+            <tr><td>Mina</td><td>SnarkyJS (zkApps)</td><td>🔴 Very Hard</td><td>zk-SNARKs and recursion</td></tr>
+            <tr><td>ICP</td><td>Motoko, Rust</td><td>🟡 Medium</td><td>WASM, but architectural differences</td></tr>
+          </table>
+        </div>
+        <div class="stage stage-4">
+          <h2>❌ Tier 4 — Not Viable / No General Smart Contracts</h2>
+          <table>
+            <tr><th>Blockchain</th><th>Why Not</th></tr>
+            <tr><td>Bitcoin</td><td>No general smart contracts (Script only)</td></tr>
+            <tr><td>Dogecoin</td><td>Bitcoin clone — no contract VM</td></tr>
+            <tr><td>Litecoin</td><td>Same as Bitcoin</td></tr>
+            <tr><td>XRP Ledger</td><td>Only lightweight logic ("hooks"), not full Turing-complete contracts</td></tr>
+            <tr><td>Ton (Telegram)</td><td>Custom assembly stack logic</td></tr>
+            <tr><td>EOS</td><td>C++ contracts with special compiler toolchain (limited adoption)</td></tr>
+            <tr><td>Tron</td><td>EVM clone, but very centralized and limited tools</td></tr>
+            <tr><td>Hedera</td><td>Uses Hedera Smart Contracts (Solidity), but not widely developer-friendly</td></tr>
+            <tr><td>IOTA</td><td>Not general-purpose (yet) — smart contracts in early phase</td></tr>
+            <tr><td>Zilliqa</td><td>Scilla (functional, security-focused) — hard to map directly</td></tr>
+            <tr><td>Flow</td><td>Cadence (resource-oriented), unique programming model</td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="timeline">
+        <div class="timeline-stage active">
+          <div class="circle"></div>
+          <p>✅ Stage 1</p>
+        </div>
+        <div class="timeline-stage">
+          <div class="circle"></div>
+          <p>⚠️ Stage 2</p>
+        </div>
+        <div class="timeline-stage">
+          <div class="circle"></div>
+          <p>❗ Stage 3</p>
+        </div>
+        <div class="timeline-stage">
+          <div class="circle"></div>
+          <p>❌ Stage 4</p>
+        </div>
+      </div>
+      <hr style="margin: 80px 0; border: none; border-top: 2px dashed #5b21b6;">
+      <section style="max-width: 900px; margin: auto; background: #1c1c2b; padding: 40px; border-radius: 12px; border: 2px solid #5b21b6;">
+        <h2 style="color: #a78bfa; text-align: center; font-size: 1.8em; margin-bottom: 30px;">✅ Conclusion: What's Viable for Astranet MVP</h2>
+
+        <div style="margin-bottom: 30px;">
+          <h3 style="color: #22c55e;">🌟 Strong Targets (Include in MVP)</h3>
+          <ul style="line-height: 1.8;">
+            <li>Ethereum, BSC, Polygon → <strong>Solidity/Vyper → ink!</strong> ✅</li>
+            <li>NEAR → <strong>Rust → ink!</strong> ✅</li>
+            <li>Cosmos (CosmWasm) → <strong>Rust → ink!</strong> ✅</li>
+            <li>Solana (Anchor) → <strong>Rust → ink!</strong> ✅ (with simplification)</li>
+          </ul>
+        </div>
+
+        <div style="margin-bottom: 30px;">
+          <h3 style="color: #facc15;">⚠️ Optional / "Coming Soon" Label</h3>
+          <ul style="line-height: 1.8;">
+            <li>Cardano (Plutus)</li>
+            <li>Tezos (SmartPy)</li>
+            <li>StarkNet (Cairo)</li>
+            <li>Algorand (TEAL)</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 style="color: #ef4444;">❌ Exclude from MVP</h3>
+          <ul style="line-height: 1.8;">
+            <li>Bitcoin / Litecoin / XRP / Doge / Ton / EOS</li>
+          </ul>
+        </div>
+
+        <p style="margin-top: 40px; color: #a1a1aa; font-size: 0.95em; line-height: 1.6;">
+          This conclusion gives us a validated scope for the MVP: focusing on chains that are technically feasible and architecturally aligned with Polkadot. Future versions can expand into more advanced translations as the toolchain and demand evolve. This ensures Astranet delivers real value fast, while remaining modular and future-proof.
+        </p>
+      </section>
+    </div>
+  </div>
+  <script src="../code/popup-notify.js"></script>
+  <script type="module" src="../code/navbar.js" defer></script>
+  <script type="module" src="../code/auth.js"></script>
+</body>
+</html>
