@@ -1,0 +1,91 @@
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+.accordion-header-button {
+    transition: background-color 0.3s ease;
+}
+
+.accordion-header-button:hover {
+    background-color: rgba(51, 65, 85, 0.7); /* slate-700 with a bit more opacity or a slightly different shade */
+}
+
+/* Custom focus style for accordion headers for keyboard navigation */
+.accordion-header-button:focus-visible {
+    outline: 2px solid #ec4899; /* pink-500 */
+    outline-offset: 2px;
+    background-color: rgba(51, 65, 85, 0.6); /* Slightly highlight background on focus */
+    border-radius: 0.125rem; /* Slight rounding to match typical button styles if needed */
+}
+/* Remove default outline for focus if :focus-visible is supported and used */
+.accordion-header-button:focus {
+    outline: none;
+}
+
+
+.accordion-content {
+    overflow: hidden;
+    transition: max-height 0.5s cubic-bezier(0.25, 0.1, 0.25, 1), opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+    max-height: 0;
+    opacity: 0;
+    visibility: hidden; /* Add visibility for better accessibility */
+}
+
+.accordion-content.open {
+    max-height: 2000px; 
+    opacity: 1;
+    visibility: visible;
+}
+
+.source-link {
+    transition: color 0.2s ease-in-out, transform 0.2s ease-in-out;
+    display: inline-block;
+}
+
+.source-link:hover {
+    color: #ec4899; /* Tailwind pink-500 */
+    transform: translateY(-1px);
+}
+
+.highlight-bar {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.375rem;
+    font-weight: 600;
+    background-image: linear-gradient(to right, #ec4899, #d946ef); /* pink-500 to fuchsia-500 */
+    color: white;
+    box-shadow: 0 4px 14px 0 rgba(236, 72, 153, 0.39);
+}
+
+.fade-in {
+    animation: fadeInAnimation 0.5s ease-in-out;
+}
+
+@keyframes fadeInAnimation {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #1e293b; /* slate-800 */
+}
+
+::-webkit-scrollbar-thumb {
+    background: #4a5568; /* slate-600 */
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #ec4899; /* pink-500 */
+}

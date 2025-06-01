@@ -34,8 +34,21 @@
   <h1>Generate UID</h1>
   <input type="text" id="uidOutput" readonly />
   <button onclick="generateAndCopyID()">Generate and Copy</button>
+  <input type="text" id="sessionUID" placeholder="Session UID" />
+  <button onclick="startSession()">Start Session</button>
+  <button onclick="joinSession()">Join Session</button>
+  <div id="chatLog"></div>
+  <input type="text" id="chatInput" />
+  <button onclick="sendChat()">Send</button>
+  <span id="notificationDot" style="display:none;">●</span>
 
   <script>
+    import { getDatabase, ref, set, update, get, push, onChildAdded } from 'https://www.gstatic.com/firebasejs/9.6.7/firebase-database.js';
+    import { getAuth } from 'https://www.gstatic.com/firebasejs/9.6.7/firebase-auth.js';
+
+    const db = getDatabase();
+    const auth = getAuth();
+
     function generateLightweightID(length = 13) {
       const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-';
       let id = '';
@@ -53,6 +66,125 @@
       output.setSelectionRange(0, 99999); // For mobile devices
       document.execCommand('copy');
       popupNotifier.success('UID copiado al portapapeles: ' + uid, 'UID Copiado');
+    }
+
+    async function createChatSession(walletAddress) {
+      const user = auth.currentUser;
+      if (!user) throw new Error("Not logged in");
+
+      // Generate a UID for the session
+      const sessionUID = generateLightweightID();
+
+      // Create session in DB
+      await set(ref(db, `chatSessions/${sessionUID}`), {
+        participants: {
+          [user.uid]: { wallet: walletAddress, blocked: false }
+        },
+        createdBy: user.uid,
+        createdAt: Date.now()
+      });
+
+      // Add session to user's chatSessions
+      await update(ref(db, `users/${user.uid}/chatSessions`), { [sessionUID]: true });
+
+      return sessionUID;
+    }
+
+    async function joinChatSession(sessionUID, walletAddress) {
+      const user = auth.currentUser;
+      if (!user) throw new Error("Not logged in");
+
+      // Add user to session participants
+      await update(ref(db, `chatSessions/${sessionUID}/participants`), {
+        [user.uid]: { wallet: walletAddress, blocked: false }
+      });
+
+      // Add session to user's chatSessions
+      await update(ref(db, `users/${user.uid}/chatSessions`), { [sessionUID]: true });
+    }
+
+    async function sendMessage(sessionUID, text, sender = null) {
+      const user = auth.currentUser;
+      if (!user && !sender) throw new Error("Not logged in");
+
+      const msgRef = push(ref(db, `chatSessions/${sessionUID}/messages`));
+      await set(msgRef, {
+        sender: sender || user.uid,
+        text,
+        timestamp: Date.now(),
+        readBy: { [sender || user.uid]: true }
+      });
+    }
+
+    function listenForMessages(sessionUID, onMessage) {
+      const messagesRef = ref(db, `chatSessions/${sessionUID}/messages`);
+      onChildAdded(messagesRef, (snapshot) => {
+        onMessage(snapshot.val());
+      });
+    }
+
+    async function markMessagesAsRead(sessionUID) {
+      const user = auth.currentUser;
+      if (!user) throw new Error("Not logged in");
+
+      const messagesRef = ref(db, `chatSessions/${sessionUID}/messages`);
+      const snapshot = await get(messagesRef);
+      snapshot.forEach(child => {
+        const msgKey = child.key;
+        update(ref(db, `chatSessions/${sessionUID}/messages/${msgKey}/readBy`), {
+          [user.uid]: true
+        });
+      });
+    }
+
+    async function kickUserFromSession(sessionUID, targetUid) {
+      await update(ref(db, `chatSessions/${sessionUID}/participants/${targetUid}`), { blocked: true });
+    }
+
+    async function removeChatSession(sessionUID) {
+      await set(ref(db, `chatSessions/${sessionUID}`), null);
+    }
+
+    let currentSessionUID = null;
+
+    async function startSession() {
+      const wallet = "user-wallet-address"; // Get from user profile
+      const sessionUID = await createChatSession(wallet);
+      document.getElementById('sessionUID').value = sessionUID;
+      currentSessionUID = sessionUID;
+      listenForMessages(sessionUID, displayMessage);
+    }
+
+    async function joinSession() {
+      const sessionUID = document.getElementById('sessionUID').value;
+      const wallet = "user-wallet-address";
+      await joinChatSession(sessionUID, wallet);
+      currentSessionUID = sessionUID;
+      listenForMessages(sessionUID, displayMessage);
+    }
+
+    function displayMessage(msg) {
+      const chatLog = document.getElementById('chatLog');
+      chatLog.innerHTML += `<div>${msg.sender}: ${msg.text}</div>`;
+      // Notification logic here
+    }
+
+    async function sendChat() {
+      const text = document.getElementById('chatInput').value;
+      await sendMessage(currentSessionUID, text);
+    }
+
+    function checkForUnread(sessionUID) {
+      const user = auth.currentUser;
+      const messagesRef = ref(db, `chatSessions/${sessionUID}/messages`);
+      get(messagesRef).then(snapshot => {
+        let hasUnread = false;
+        snapshot.forEach(child => {
+          const msg = child.val();
+          if (!msg.readBy || !msg.readBy[user.uid]) hasUnread = true;
+        });
+        document.getElementById('notificationDot').style.display = hasUnread ? 'inline' : 'none';
+      });
     }
   </script>
 <script src="../code/popup-notify.js"></script>

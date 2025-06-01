@@ -12,12 +12,14 @@ import { getUser, getAuthUser, getProfile } from './user-cache.js';
   const PAGE_URLS = Object.freeze([
     '/inicio/landing.html',            // 0: Home
     '/datasets/gallery.html',          // 1: Datasets
-    '/astranet/chat.html',            // 2: Astranet Chat
-    '/auth/login.html',               // 3: Login
-    '/code/hackatonGuide.html'        // 4: Hackathon Guide
+    '/astranet/chat.html',             // 2: Astranet Chat
+    '/education.html',                 // 3: Education (NEW)
+    '/resources.html',                 // 4: Resources (NEW)
+    '/auth/login.html',                // 5: Login
+    '/code/hackatonGuide.html'         // 6: Hackathon Guide
   ]);
   const HOME_PAGE_INDEX = 0;
-  const LOGIN_PAGE_INDEX = 3;
+  const LOGIN_PAGE_INDEX = 5;
 
   // --- HTML TEMPLATES ---
   const NAVBAR_HTML = `
@@ -31,7 +33,9 @@ import { getUser, getAuthUser, getProfile } from './user-cache.js';
       <div class="navbar-right" id="navbar-right-menu">
         <button id="nav-datasets" data-page-index="1">Datasets</button>
         <button id="nav-chat" data-page-index="2">Astranet Chat</button>
-        <button id="nav-hackathon" data-page-index="4">Hackathon Guide</button>
+        <button id="nav-education" data-page-index="3">Education</button>
+        <button id="nav-resources" data-page-index="4">Resources</button>
+        <button id="nav-hackathon" data-page-index="6">Hackathon Guide</button>
         <div id="user-section"><!-- User-specific content --></div>
       </div>
     </nav>
@@ -75,7 +79,7 @@ import { getUser, getAuthUser, getProfile } from './user-cache.js';
     const currentPath = window.location.pathname;
     let normalizedPath = currentPath.endsWith('/') && currentPath.length > 1 ? currentPath.slice(0, -1) : currentPath;
     if (['', '/inicio', '/inicio/index.html'].includes(normalizedPath)) {
-      normalizedPath = PAGE_URLS[HOME_PAGE_INDEX];
+      normalizedPath = PAGE_URLS[LOGIN_PAGE_INDEX];
     }
 
     currentPageIndex = PAGE_URLS.findIndex(url => {
@@ -84,10 +88,10 @@ import { getUser, getAuthUser, getProfile } from './user-cache.js';
     });
 
     if (currentPageIndex === -1) { // Fallback for direct section access
-      if (normalizedPath.startsWith('/newsletter')) currentPageIndex = 1;
-      else if (normalizedPath.startsWith('/herramientas')) currentPageIndex = 2;
-      else if (normalizedPath.startsWith('/blog')) currentPageIndex = 3;
-      else if (normalizedPath.startsWith('/prompts')) currentPageIndex = 4;
+      if (normalizedPath.startsWith('/newsletter')) currentPageIndex = 3;
+      else if (normalizedPath.startsWith('/herramientas')) currentPageIndex = 4;
+      else if (normalizedPath.startsWith('/blog')) currentPageIndex = LOGIN_PAGE_INDEX;
+      else if (normalizedPath.startsWith('/prompts')) currentPageIndex = 3;
       else if (normalizedPath.startsWith('/auth/login')) currentPageIndex = LOGIN_PAGE_INDEX;
       else currentPageIndex = null;
     }
@@ -175,7 +179,7 @@ import { getUser, getAuthUser, getProfile } from './user-cache.js';
     else if (user && profile) {
       currentUserAuthData = user; currentProfileData = profile;;
       if (currentProfileData.ftue === false) _showFtueModal();
-      else { _hideFtueModal(); if (window.location.pathname.startsWith('/auth/login')) _navigateTo(HOME_PAGE_INDEX); }
+      else { _hideFtueModal(); if (window.location.pathname.startsWith('/auth/login')) _navigateTo(LOGIN_PAGE_INDEX); }
     } else { currentUserAuthData = user || null; currentProfileData = null; console.warn("Navbar: Ambiguous login state."); }
     _renderUserSection(); _highlightActivePage(); _updateCreatorBayCtaVisibility();
   }
@@ -190,7 +194,7 @@ import { getUser, getAuthUser, getProfile } from './user-cache.js';
     console.log("Navbar: Profile updated.", profile);
     if (profile && currentUserAuthData) {
       currentProfileData = profile; _renderUserSection();
-      if (currentProfileData.ftue === true) { _hideFtueModal(); if (window.location.pathname.startsWith('/auth/login')) _navigateTo(HOME_PAGE_INDEX); }
+      if (currentProfileData.ftue === true) { _hideFtueModal(); if (window.location.pathname.startsWith('/auth/login')) _navigateTo(LOGIN_PAGE_INDEX); }
     }
     _updateCreatorBayCtaVisibility();
   }
