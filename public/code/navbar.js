@@ -10,13 +10,13 @@ import { getUser, getAuthUser, getProfile } from './user-cache.js';
 
   // --- CONFIGURATION ---
   const PAGE_URLS = Object.freeze([
-    '/inicio/landing.html',            // 0: Home
-    '/datasets/gallery.html',          // 1: Datasets
-    '/astranet/chat.html',             // 2: Astranet Chat
-    '/education.html',                 // 3: Education (NEW)
-    '/resources.html',                 // 4: Resources (NEW)
-    '/auth/login.html',                // 5: Login
-    '/code/hackatonGuide.html'         // 6: Hackathon Guide
+    '/inicio/landing.html',                // 0: Home
+    '/datasets/gallery.html',              // 1: Datasets
+    '/astranet/chat.html',                 // 2: Chat
+    '/education/glosary/index.html',       // 3: Education
+    '/roadmap/roadmap.html',               // 4: Roadmap
+    '/auth/login.html',                    // 5: Login
+    '/code/hackatonGuide.html'             // 6: Hackathon Guide
   ]);
   const HOME_PAGE_INDEX = 0;
   const LOGIN_PAGE_INDEX = 5;
@@ -32,9 +32,14 @@ import { getUser, getAuthUser, getProfile } from './user-cache.js';
       </button>
       <div class="navbar-right" id="navbar-right-menu">
         <button id="nav-datasets" data-page-index="1">Datasets</button>
-        <button id="nav-chat" data-page-index="2">Astranet Chat</button>
-        <button id="nav-education" data-page-index="3">Education</button>
-        <button id="nav-resources" data-page-index="4">Resources</button>
+        <div class="nav-group" id="concepts-group">
+          <button id="concepts-button" aria-haspopup="true" aria-expanded="false">Concepts</button>
+          <div class="nav-dropdown" id="concepts-dropdown">
+            <button id="nav-chat" data-page-index="2">Chat</button>
+            <button id="nav-education" data-page-index="3">Education</button>
+            <button id="nav-roadmap" data-page-index="4">Roadmap</button>
+          </div>
+        </div>
         <button id="nav-hackathon" data-page-index="6">Hackathon Guide</button>
         <div id="user-section"><!-- User-specific content --></div>
       </div>
@@ -88,7 +93,9 @@ import { getUser, getAuthUser, getProfile } from './user-cache.js';
     });
 
     if (currentPageIndex === -1) { // Fallback for direct section access
-      if (normalizedPath.startsWith('/newsletter')) currentPageIndex = 3;
+      if (normalizedPath.startsWith('/education')) currentPageIndex = 3;
+      else if (normalizedPath.startsWith('/roadmap')) currentPageIndex = 4;
+      else if (normalizedPath.startsWith('/newsletter')) currentPageIndex = 3;
       else if (normalizedPath.startsWith('/herramientas')) currentPageIndex = 4;
       else if (normalizedPath.startsWith('/blog')) currentPageIndex = LOGIN_PAGE_INDEX;
       else if (normalizedPath.startsWith('/prompts')) currentPageIndex = 3;
@@ -100,9 +107,12 @@ import { getUser, getAuthUser, getProfile } from './user-cache.js';
   function _highlightActivePage() {
     if (!navMenuElement) return;
     navMenuElement.querySelectorAll('[data-page-index]').forEach(btn => btn.classList.remove('active'));
+    const conceptsBtn = document.getElementById('concepts-button');
+    conceptsBtn?.classList.remove('active');
     if (currentPageIndex !== null) {
       const activeBtn = navMenuElement.querySelector(`[data-page-index="${currentPageIndex}"]`);
       activeBtn?.classList.add('active');
+      if ([2,3,4].includes(currentPageIndex)) conceptsBtn?.classList.add('active');
     }
   }
 
@@ -168,6 +178,23 @@ import { getUser, getAuthUser, getProfile } from './user-cache.js';
         navMenuElement.classList.remove('active');
         hamburgerButtonElement.classList.remove('active');
         hamburgerButtonElement.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
+
+  function _attachConceptsDropdownEvents() {
+    const group = document.getElementById('concepts-group');
+    const button = document.getElementById('concepts-button');
+    if (!group || !button) return;
+    button.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = group.classList.toggle('open');
+      button.setAttribute('aria-expanded', isOpen.toString());
+    });
+    document.addEventListener('click', (e) => {
+      if (!group.contains(e.target)) {
+        group.classList.remove('open');
+        button.setAttribute('aria-expanded', 'false');
       }
     });
   }
@@ -284,7 +311,7 @@ import { getUser, getAuthUser, getProfile } from './user-cache.js';
     hamburgerButtonElement = document.getElementById('hamburgerMenuButton');
     userSectionElement = document.getElementById('user-section');
     creatorsbayBtnElement = document.querySelector('.creatorsbay-cta-btn');
-    _attachMainNavigationEvents(); _attachHamburgerMenuEvents();
+    _attachMainNavigationEvents(); _attachHamburgerMenuEvents(); _attachConceptsDropdownEvents();
     _detectCurrentPage(); _highlightActivePage(); _renderUserSection();
     _insertFtueModal(); _setupAuthEventListeners();
     _updateCreatorBayCtaVisibility();
