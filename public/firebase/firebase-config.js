@@ -1,10 +1,10 @@
 // public/firebase/firebase-config.js
 
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-import { getDatabase } from 'firebase/database';
-import { getAuth } from 'firebase/auth';
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.7/firebase-app.js';
+import { getAnalytics } from 'https://www.gstatic.com/firebasejs/9.6.7/firebase-analytics.js';
+import { getDatabase } from 'https://www.gstatic.com/firebasejs/9.6.7/firebase-database.js';
+import { getAuth } from 'https://www.gstatic.com/firebasejs/9.6.7/firebase-auth.js';
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional

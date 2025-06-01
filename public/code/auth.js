@@ -20,7 +20,7 @@ import {
   uploadBytes,
   getDownloadURL
 } from 'https://www.gstatic.com/firebasejs/9.6.7/firebase-storage.js';
-import firebaseConfig from '../Firebase/firebase-config.js';
+import firebaseConfig from '../firebase/firebase-config.js';
 import { setUser, clearUser, updateProfile } from './user-cache.js';
 
 const app = initializeApp(firebaseConfig);
