@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>UID Generator</title>
   <link rel="stylesheet" href="../assets/css/popup-notify/popup-notify.css">
+  <link rel="stylesheet" href="../assets/css/navbar.css">
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -31,6 +32,7 @@
   </style>
 </head>
 <body>
+  <div id="navbar-container"></div>
   <h1>Generate UID</h1>
   <input type="text" id="uidOutput" readonly />
   <button onclick="generateAndCopyID()">Generate and Copy</button>
@@ -188,5 +190,7 @@
     }
   </script>
 <script src="../code/popup-notify.js"></script>
+<script type="module" src="../code/navbar.js" defer></script>
+<script type="module" src="../code/auth.js"></script>
 </body>
 </html>

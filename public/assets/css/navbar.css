@@ -63,6 +63,11 @@ nav#navbar .navbar-right button.active {
   color: #1e90ff;
   background-color: #e6f2ff;
 }
+nav#navbar a:focus-visible, nav#navbar button:focus-visible {
+  outline: 2px solid #1e90ff;
+  outline-offset: 2px;
+}
+
 
 nav#navbar .nav-group {
   position: relative;
