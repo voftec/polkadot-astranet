@@ -44,7 +44,7 @@ onAuthStateChanged(auth, async (user) => {
     }
 
     try {
-      const userProfilePath = `users/${user.uid}`;
+      const userProfilePath = `users/${user.uid}`; // Path to the entire user node
       const adminStatusPath = `admins/${user.uid}`;
 
       const [profileSnapshot, adminStatusSnapshot] = await Promise.all([

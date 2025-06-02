@@ -358,3 +358,45 @@ body {
 .hidden {
     display: none !important;
 }
+
+these within your existing styles */
+
+.chat-list-item {
+    /* ... your existing styles for .chat-list-item ... */
+    position: relative; /* To position the delete button absolutely if needed, or just for flex alignment */
+    /* Ensure display:flex and align-items:center are already there for vertical alignment */
+}
+
+.chat-item-details {
+    flex-grow: 1; /* Ensure it takes up space so delete button is on the right */
+    min-width: 0; /* Important for flex items that might contain truncating text */
+}
+
+
+.chat-item-delete-button {
+    background-color: transparent;
+    border: none;
+    color: var(--secondary-text); /* Or a reddish color: #ff6b6b; */
+    padding: 5px; /* Small padding to make it easier to click */
+    margin-left: 10px; /* Space from the chat details */
+    cursor: pointer;
+    border-radius: 50%; /* Make it circular */
+    display: flex; /* To center the icon inside */
+    align-items: center;
+    justify-content: center;
+    width: 28px; /* Explicit size */
+    height: 28px; /* Explicit size */
+    transition: background-color 0.2s, color 0.2s;
+    flex-shrink: 0; /* Prevent button from shrinking */
+}
+
+.chat-item-delete-button:hover {
+    background-color: rgba(255, 107, 107, 0.1); /* Light red background on hover */
+    color: #ff4d4d; /* Brighter red icon on hover */
+}
+
+.chat-item-delete-button svg {
+    width: 18px; /* Size of the feather icon */
+    height: 18px;
+    stroke-width: 2.5; /* Make icon a bit bolder */
+}

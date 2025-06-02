@@ -1,6 +1,7 @@
 // chat-ui.js
 import { getAuth } from 'https://www.gstatic.com/firebasejs/9.6.7/firebase-auth.js';
-import { startNewChatWithUser, loadUserChatList, sendMessageToChat, listenForMessages } from './astranetSDKChat.js';
+import { startNewChatWithUser, loadUserChatList, sendMessageToChat, listenForMessages, deleteChatFromHistory } from './astranetSDKChat.js';
+
 
 const auth = getAuth();
 
@@ -117,46 +118,113 @@ async function loadAndRenderChatList() {
     }
 }
 
+async function handleDeleteChat(chatID, chatName, participants) {
+  console.log("chat-ui.js: handleDeleteChat called for chatID:", chatID, "Name:", chatName);
+
+  const confirmation = window.confirm(`Are you sure you want to delete the chat "${chatName}"? This action cannot be undone.`);
+
+  if (confirmation) {
+      console.log("chat-ui.js: User confirmed deletion for chatID:", chatID);
+      try {
+          if (!auth.currentUser) {
+              throw new Error("User not authenticated to delete chat.");
+          }
+          // We need all participant UIDs to delete the chat from everyone's history
+          const participantUIDs = Object.keys(participants || {});
+          if (participantUIDs.length === 0) {
+              throw new Error("Cannot delete chat: participant list is empty.");
+          }
+
+          await deleteChatFromHistory(chatID, participantUIDs);
+          console.log("chat-ui.js: Chat deletion successful for chatID:", chatID);
+
+          // UI Update:
+          // 1. If this deleted chat was the currently selected one, show placeholder
+          if (currentSelectedChatID === chatID) {
+              showPlaceholderScreen();
+          }
+          // 2. Remove the item from the list OR reload the list
+          const itemToRemove = chatListElement.querySelector(`.chat-list-item[data-chat-id="${chatID}"]`);
+          if (itemToRemove) {
+              itemToRemove.remove();
+          } else {
+              // Fallback to reloading the whole list if item not found (should not happen often)
+              await loadAndRenderChatList();
+          }
+          
+          if (window.popupNotifier) {
+              popupNotifier.success(`Chat "${chatName}" deleted.`, 'Success');
+          }
+
+      } catch (error) {
+          console.error("chat-ui.js: Error deleting chat:", error);
+          if (window.popupNotifier) {
+              popupNotifier.error(`Failed to delete chat: ${error.message}`, 'Error');
+          }
+      }
+  } else {
+      console.log("chat-ui.js: User cancelled deletion for chatID:", chatID);
+  }
+}
+
 function createChatListItem(chat) {
-    const { chatID, name, participants, messages, createdAt } = chat; // Ensure chat objects have these
-    // console.log("chat-ui.js: createChatListItem for chatID:", chatID, "Data:", chat);
-    const item = document.createElement('div');
-    item.className = 'chat-list-item';
-    item.dataset.chatId = chatID;
+  const { chatID, name, participants, messages, createdAt } = chat;
+  // console.log("chat-ui.js: createChatListItem for chatID:", chatID, "Data:", chat);
+  const item = document.createElement('div');
+  item.className = 'chat-list-item';
+  item.dataset.chatId = chatID;
 
-    let lastMessageText = "No messages yet...";
-    // let lastMessageTimestamp = createdAt || 0; // Fallback to createdAt
-    if (messages && Object.keys(messages).length > 0) {
-        const sortedMessages = Object.values(messages).sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-        if (sortedMessages.length > 0 && sortedMessages[0]) {
-            lastMessageText = sortedMessages[0].text || "Media content";
-            if (lastMessageText.length > 35) lastMessageText = lastMessageText.substring(0, 32) + "...";
-            // lastMessageTimestamp = sortedMessages[0].timestamp || lastMessageTimestamp;
-        }
-    }
+  let lastMessageText = "No messages yet...";
+  if (messages && Object.keys(messages).length > 0) {
+      const sortedMessages = Object.values(messages).sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+      if (sortedMessages.length > 0 && sortedMessages[0]) {
+          lastMessageText = sortedMessages[0].text || "Media content";
+          if (lastMessageText.length > 35) lastMessageText = lastMessageText.substring(0, 32) + "...";
+      }
+  }
 
-    let displayName = name || `Chat (${chatID.substring(0, 6)}...)`;
-    if (participants && Object.keys(participants).length === 2 && auth.currentUser) {
-        const partnerId = Object.keys(participants).find(uid => uid !== auth.currentUser.uid);
-        if (partnerId === DEFAULT_PARTNER_UID) {
-            displayName = "Astranet Assistant";
-        } else if (partnerId) {
-             // In a real app, you'd fetch profile to get partner's name
-            // displayName = `User (${partnerId.substring(0,4)})`;
-        }
-    }
+  let displayName = name || `Chat (${chatID.substring(0, 6)}...)`;
+  if (participants && Object.keys(participants).length === 2 && auth.currentUser) {
+      const partnerId = Object.keys(participants).find(uid => uid !== auth.currentUser.uid);
+      if (partnerId === DEFAULT_PARTNER_UID) {
+          displayName = "Astranet Assistant";
+      }
+  }
 
-    item.innerHTML = `
-        <div class="chat-item-icon-container">
-          <i data-feather="message-square"></i>
-        </div>
-        <div class="chat-item-details">
-          <p class="chat-item-name">${displayName}</p>
-          <p class="chat-item-last-message">${lastMessageText}</p>
-        </div>
-    `;
-    item.addEventListener('click', () => selectChat(chat));
-    return item;
+  // --- MODIFICATION START ---
+  item.innerHTML = `
+      <div class="chat-item-icon-container" data-action="select">
+        <i data-feather="message-square"></i>
+      </div>
+      <div class="chat-item-details" data-action="select">
+        <p class="chat-item-name">${displayName}</p>
+        <p class="chat-item-last-message">${lastMessageText}</p>
+      </div>
+      <button class="chat-item-delete-button" title="Delete Chat">
+          <i data-feather="x-circle"></i>
+      </button>
+  `;
+
+  // Event listener for selecting the chat (on the main content area)
+  // We use event delegation on the item itself to differentiate actions
+  item.addEventListener('click', (event) => {
+      const target = event.target.closest('[data-action="select"], .chat-item-delete-button');
+      
+      if (target && target.classList.contains('chat-item-delete-button')) {
+          // Delete button was clicked (or its icon)
+          event.stopPropagation(); // Prevent chat selection
+          handleDeleteChat(chatID, displayName, participants);
+      } else if (target && target.dataset.action === 'select') {
+          // Main content area was clicked
+          selectChat(chat);
+      } else if (event.target === item) { 
+          // Clicked on padding of item, still select
+          selectChat(chat);
+      }
+  });
+  // --- MODIFICATION END ---
+  
+  return item;
 }
 
 // --- Active Chat Selection & Message Display ---

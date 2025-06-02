@@ -1,30 +1,30 @@
 // astranetSDKChat.js
 import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/9.6.7/firebase-storage.js';
-import { getDatabase, ref, set, update, push, get, onChildAdded, serverTimestamp, off, query, orderByChild, limitToLast } from 'https://www.gstatic.com/firebasejs/9.6.7/firebase-database.js'; // Added query, orderByChild, limitToLast
+import { getDatabase, ref, set, update, push, get, onChildAdded, serverTimestamp, off, query, orderByChild, limitToLast } from 'https://www.gstatic.com/firebasejs/9.6.7/firebase-database.js';
 import { getAuth } from 'https://www.gstatic.com/firebasejs/9.6.7/firebase-auth.js';
 
-const storage = getStorage(); // Ensure Firebase is initialized before this script
+const storage = getStorage();
 const db = getDatabase();
 const auth = getAuth();
 
+// THIS FUNCTION MUST BE IN THE GLOBAL SCOPE OF THE MODULE
 /**
  * Generates a lightweight, somewhat unique ID.
  * @param {number} length
  * @returns {string}
  */
-function generateLightweightID(length = 16) { // Increased length slightly
+function generateLightweightID(length = 16) {
   const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
   let id = '';
-  const timestamp = Date.now().toString(36); // Add time component for better uniqueness
-  id += timestamp.slice(-5); // Use last 5 chars of timestamp
-
+  const timestamp = Date.now().toString(36);
+  id += timestamp.slice(-5);
   for (let i = id.length; i < length; i++) {
     id += chars[Math.floor(Math.random() * chars.length)];
   }
   return id;
 }
 
-
+// THIS FUNCTION MUST BE IN THE GLOBAL SCOPE OF THE MODULE
 /**
  * Upload a file to Firebase Storage and return its download URL and original file name.
  * @param {File} file
@@ -33,7 +33,6 @@ function generateLightweightID(length = 16) { // Increased length slightly
  */
 export async function uploadFileAndGetMetadata(file, path) {
   console.log("SDK: uploadFileAndGetMetadata called for path:", path, "File:", file.name);
-  // Create a unique file name for storage to avoid collisions, but keep original name for display
   const uniqueFileName = `${Date.now()}_${file.name.replace(/\s+/g, '_')}`;
   const fileRef = storageRef(storage, `${path.endsWith('/') ? path : path + '/'}${uniqueFileName}`);
   try {
@@ -47,6 +46,7 @@ export async function uploadFileAndGetMetadata(file, path) {
   }
 }
 
+// THIS FUNCTION MUST BE IN THE GLOBAL SCOPE OF THE MODULE
 /**
  * Starts a new chat session with a partner.
  * @param {string} partnerUid UID of the chat partner.
@@ -66,10 +66,6 @@ export async function startNewChatWithUser(partnerUid, chatName = 'New Conversat
   }
   console.log("SDK: Current user UID:", user.uid);
 
-  // Optional: Check if a chat already exists with this partner
-  // This would require querying chatHistory for a chat with these exact two participants.
-  // For simplicity, we'll allow multiple chats with the same person for now.
-
   const chatID = generateLightweightID();
   console.log("SDK: Generated chatID:", chatID);
 
@@ -79,30 +75,23 @@ export async function startNewChatWithUser(partnerUid, chatName = 'New Conversat
       [user.uid]: true,
       [partnerUid]: true
     },
-    messages: {}, // Initialize as an empty object for new chats
-    createdAt: serverTimestamp(), // Use server timestamp for consistency
-    lastActivity: serverTimestamp(), // Track last activity
-    // Store participant UIDs in an array for easier querying if needed later
-    participantUIDs: [user.uid, partnerUid].sort() // Sort for consistent querying
+    messages: {},
+    createdAt: serverTimestamp(),
+    lastActivity: serverTimestamp(),
+    participantUIDs: [user.uid, partnerUid].sort()
   };
   console.log("SDK: Session data to be stored:", sessionData);
 
   try {
-    const userChatPath = `users/${user.uid}/chatHistory/${chatID}`;
-    const partnerChatPath = `users/${partnerUid}/chatHistory/${chatID}`;
-
     const updates = {};
-    updates[userChatPath] = sessionData;
-    // Only write to partner if it's a different user
+    updates[`users/${user.uid}/chatHistory/${chatID}`] = sessionData;
     if (user.uid !== partnerUid) {
-        updates[partnerChatPath] = sessionData;
+        updates[`users/${partnerUid}/chatHistory/${chatID}`] = sessionData;
     } else {
         console.log("SDK: Partner is self (solo chat), only one chat history entry will be created.");
     }
-
     console.log("SDK: Performing multi-path update for new chat:", updates);
-    await update(ref(db), updates); // Use multi-path update for atomicity
-
+    await update(ref(db), updates);
     console.log(`SDK: Chat session ${chatID} stored successfully.`);
     return chatID;
   } catch (error) {
@@ -111,6 +100,7 @@ export async function startNewChatWithUser(partnerUid, chatName = 'New Conversat
   }
 }
 
+// THIS FUNCTION MUST BE IN THE GLOBAL SCOPE OF THE MODULE
 /**
  * Sends a message to a specific chat.
  * Updates lastActivity for the chat session on both users' sides.
@@ -131,49 +121,37 @@ export async function sendMessageToChat(chatID, text, partnerUid, fileURL = null
     console.error("SDK: partnerUid is required for sendMessageToChat to update both copies.");
     throw new Error("Partner UID is required to send message correctly.");
   }
-  if (!text && !fileURL) {
+   if (!text && !fileURL) {
     console.error("SDK: Cannot send an empty message (no text and no file).");
     throw new Error("Message content (text or file) is required.");
   }
 
-
   const msgData = {
     sender: user.uid,
-    text: text || "", // Ensure text is at least an empty string if not provided
+    text: text || "",
     timestamp: serverTimestamp(),
-    readBy: { [user.uid]: true } // Mark as read by sender
+    readBy: { [user.uid]: true }
   };
   if (fileURL) msgData.fileURL = fileURL;
   if (fileName) msgData.fileName = fileName;
-
   console.log("SDK: Message data to be sent:", msgData);
 
-  const userMessageRef = push(ref(db, `users/${user.uid}/chatHistory/${chatID}/messages`));
-  const partnerMessageRef = push(ref(db, `users/${partnerUid}/chatHistory/${chatID}/messages`));
+  const userMessageKey = push(ref(db, `users/${user.uid}/chatHistory/${chatID}/messages`)).key;
+  let partnerMessageKey = null;
+  if (user.uid !== partnerUid) {
+    partnerMessageKey = push(ref(db, `users/${partnerUid}/chatHistory/${chatID}/messages`)).key;
+  }
 
-  // Create updates object for atomic operation
   const updates = {};
-  updates[`users/${user.uid}/chatHistory/${chatID}/messages/${userMessageRef.key}`] = msgData;
+  updates[`users/${user.uid}/chatHistory/${chatID}/messages/${userMessageKey}`] = msgData;
   updates[`users/${user.uid}/chatHistory/${chatID}/lastActivity`] = serverTimestamp();
   updates[`users/${user.uid}/chatHistory/${chatID}/lastMessagePreview`] = text ? (text.length > 50 ? text.substring(0,47)+"..." : text) : (fileName || "File sent");
 
-
-  // Only update partner if it's a different user
-  if (user.uid !== partnerUid) {
-    updates[`users/${partnerUid}/chatHistory/${chatID}/messages/${partnerMessageRef.key}`] = msgData; // Use the *same key* for message if you want perfect sync, or different if each user has own "copy" of message list. For simplicity, assuming same message data, new key on partner.
-    // A better approach for shared messages is a central message store, but this duplicates as per current structure.
-    // If messages are stored centrally:
-    // const messageKey = push(ref(db, `chats/${chatID}/messages`)).key;
-    // updates[`chats/${chatID}/messages/${messageKey}`] = msgData;
-    // updates[`users/${user.uid}/chatHistory/${chatID}/lastMessageKey`] = messageKey;
-    // updates[`users/${partnerUid}/chatHistory/${chatID}/lastMessageKey`] = messageKey;
-
-    // For current duplicated structure:
-    updates[`users/${partnerUid}/chatHistory/${chatID}/messages/${partnerMessageRef.key}`] = msgData; // Note: partnerMessageRef.key will be different from userMessageRef.key
+  if (user.uid !== partnerUid && partnerMessageKey) {
+    updates[`users/${partnerUid}/chatHistory/${chatID}/messages/${partnerMessageKey}`] = msgData;
     updates[`users/${partnerUid}/chatHistory/${chatID}/lastActivity`] = serverTimestamp();
     updates[`users/${partnerUid}/chatHistory/${chatID}/lastMessagePreview`] = text ? (text.length > 50 ? text.substring(0,47)+"..." : text) : (fileName || "File sent");
   }
-
 
   try {
     console.log("SDK: Performing multi-path update for sending message:", updates);
@@ -185,12 +163,12 @@ export async function sendMessageToChat(chatID, text, partnerUid, fileURL = null
   }
 }
 
+// THIS FUNCTION MUST BE IN THE GLOBAL SCOPE OF THE MODULE
 /**
  * Loads the chat list for the current user.
  * Each chat object will include `chatID` and the rest of the chat session data.
- * @returns {Promise<Array<Object>>} Array of chat session objects, sorted by lastActivity.
+ * @returns {Promise<Array<Object>>} Array of chat session objects, sorted by lastActivity or createdAt.
  */
-
 export async function loadUserChatList() {
   console.log("SDK: loadUserChatList called.");
   const user = auth.currentUser;
@@ -199,8 +177,12 @@ export async function loadUserChatList() {
     return [];
   }
   try {
-    // MODIFIED: Order by 'createdAt' since 'lastActivity' might not exist on old data
-    const chatHistoryQuery = query(ref(db, `users/${user.uid}/chatHistory`), orderByChild('createdAt'));
+    // Prioritize lastActivity for sorting if index is available and data is populated.
+    // Fallback to createdAt if lastActivity indexing causes issues or data is old.
+    // Ensure ".indexOn": ["createdAt", "lastActivity"] is in your Firebase rules.
+    const chatHistoryQuery = query(ref(db, `users/${user.uid}/chatHistory`), orderByChild('lastActivity'));
+    // const chatHistoryQuery = query(ref(db, `users/${user.uid}/chatHistory`), orderByChild('createdAt')); // Fallback
+
     const snapshot = await get(chatHistoryQuery);
 
     if (!snapshot.exists()) {
@@ -213,23 +195,24 @@ export async function loadUserChatList() {
     const chatsArray = Object.entries(chatHistory).map(([chatID, data]) => ({
       chatID,
       ...data,
-      // Ensure messages is at least an empty object if missing, for frontend stability
-      messages: data.messages || {} 
+      messages: data.messages || {},
+      createdAt: data.createdAt || 0,
+      lastActivity: data.lastActivity || data.createdAt || 0 // Fallback for sorting
     }));
-
-    // Firebase returns items ordered by createdAt in ascending order. Reverse to get descending (most recent first).
-    chatsArray.reverse(); 
     
+    // Sort client-side to ensure consistent descending order by lastActivity, then createdAt
+    chatsArray.sort((a,b) => (b.lastActivity || 0) - (a.lastActivity || 0) || (b.createdAt || 0) - (a.createdAt || 0));
+
     console.log("SDK: Processed and sorted chat list array:", chatsArray);
     return chatsArray;
   } catch (error) {
     console.error("SDK: Error loading user chat list:", error);
-    // It's often better to throw the error so the UI layer can decide how to handle it,
-    // e.g., show a specific error message rather than just an empty list.
+    // If the error is "Index not defined for lastActivity", switch to 'createdAt' query above and ensure 'createdAt' is indexed.
     throw error; 
   }
 }
 
+// THIS FUNCTION MUST BE IN THE GLOBAL SCOPE OF THE MODULE
 /**
  * Listens for new messages in a specific chat for the current user.
  * @param {string} chatID
@@ -244,12 +227,9 @@ export function listenForMessages(chatID, onMessageCallback) {
     throw new Error("Not logged in");
   }
   const messagesRef = ref(db, `users/${user.uid}/chatHistory/${chatID}/messages`);
-  
-  // Query to get messages, perhaps limit to last N initially for performance
-  const messagesQuery = query(messagesRef, orderByChild('timestamp'), limitToLast(100)); // Get last 100 messages
+  const messagesQuery = query(messagesRef, orderByChild('timestamp'), limitToLast(100));
 
   const listener = onChildAdded(messagesQuery, (snapshot) => {
-    // console.log("SDK: onChildAdded triggered for chatID:", chatID, "Msg key:", snapshot.key, "Data:", snapshot.val());
     if (snapshot.exists()) {
       onMessageCallback(snapshot.key, snapshot.val());
     }
@@ -259,14 +239,56 @@ export function listenForMessages(chatID, onMessageCallback) {
 
   return () => {
     console.log("SDK: Unsubscribing from message listener for chatID:", chatID);
-    // To turn off a listener attached with a query, you pass the query to off(), not just the ref.
     off(messagesQuery, 'child_added', listener);
   };
 }
 
+// THIS FUNCTION MUST BE IN THE GLOBAL SCOPE OF THE MODULE
+/**
+ * Deletes a chat session from the history of all specified participants.
+ * @param {string} chatID The ID of the chat to delete.
+ * @param {Array<string>} participantUIDs An array of UIDs of all participants in the chat.
+ * @returns {Promise<void>}
+ */
+export async function deleteChatFromHistory(chatID, participantUIDs) {
+  console.log("SDK: deleteChatFromHistory called. ChatID:", chatID, "Participants:", participantUIDs);
+  const currentUser = auth.currentUser;
+
+  if (!currentUser) {
+    console.error("SDK: User not logged in (deleteChatFromHistory).");
+    throw new Error("User not authenticated to perform this action.");
+  }
+  if (!chatID) {
+    console.error("SDK: chatID is required for deleteChatFromHistory.");
+    throw new Error("Chat ID is required.");
+  }
+  if (!participantUIDs || participantUIDs.length === 0) {
+    console.error("SDK: participantUIDs array is required and cannot be empty for deleteChatFromHistory.");
+    throw new Error("Participant UIDs are required.");
+  }
+
+  const updates = {};
+  participantUIDs.forEach(uid => {
+    updates[`users/${uid}/chatHistory/${chatID}`] = null; // Setting to null deletes the data
+  });
+
+  // Optional: If you have a central chat object store (e.g., /chats/{chatID}) for messages, delete it too.
+  // updates[`chats/${chatID}`] = null;
+
+  console.log("SDK: Prepared updates for chat deletion:", updates);
+
+  try {
+    await update(ref(db), updates);
+    console.log("SDK: Chat", chatID, "successfully deleted (or attempted deletion) from history for all specified participants.");
+  } catch (error) {
+    console.error("SDK: Firebase error in deleteChatFromHistory:", error);
+    throw error;
+  }
+}
+
+// THIS FUNCTION MUST BE IN THE GLOBAL SCOPE OF THE MODULE
 /**
  * Marks messages as read for the current user in a specific chat.
- * (This is a more advanced feature, not fully implemented in the UI yet)
  * @param {string} chatID
  * @param {Array<string>} messageKeys Array of message keys to mark as read.
  */
@@ -278,9 +300,6 @@ export async function markMessagesAsRead(chatID, messageKeys) {
   const updates = {};
   messageKeys.forEach(key => {
     updates[`users/${user.uid}/chatHistory/${chatID}/messages/${key}/readBy/${user.uid}`] = true;
-    // If you also update the partner's copy (requires knowing partner UID):
-    // const partnerUid = ... get partnerUid for this chat ...
-    // if (partnerUid) updates[`users/${partnerUid}/chatHistory/${chatID}/messages/${key}/readBy/${user.uid}`] = true;
   });
 
   try {
