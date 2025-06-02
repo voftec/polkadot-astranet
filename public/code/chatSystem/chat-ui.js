@@ -1,9 +1,9 @@
-import { startNewChatWithUser } from './astranetSDKChat.js';
+import { startNewChatWithUser, loadUserChatList } from './astranetSDKChat.js';
 
 // UID of the default assistant account used for new conversations
 const DEFAULT_PARTNER_UID = 'astranet-assistant';
 
-function createChatListItem(chatID) {
+function createChatListItem(chatID, chatName) {
   const item = document.createElement('div');
   item.className = 'flex items-center gap-4 bg-white px-4 min-h-14';
   item.innerHTML = `
@@ -12,7 +12,7 @@ function createChatListItem(chatID) {
         <path d="M140,128a12,12,0,1,1-12-12A12,12,0,0,1,140,128ZM84,116a12,12,0,1,0,12,12A12,12,0,0,0,84,116Zm88,0a12,12,0,1,0,12,12A12,12,0,0,0,172,116Zm60,12A104,104,0,0,1,79.12,219.82L45.07,231.17a16,16,0,0,1-20.24-20.24l11.35-34.05A104,104,0,1,1,232,128Zm-16,0A88,88,0,1,0,51.81,172.06a8,8,0,0,1,.66,6.54L40,216,77.4,203.53a7.85,7.85,0,0,1,2.53-.42,8,8,0,0,1,4,1.08A88,88,0,0,0,216,128Z"></path>
       </svg>
     </div>
-    <p class="text-[#111418] text-base font-normal leading-normal flex-1 truncate">${chatID}</p>
+    <p class="text-[#111418] text-base font-normal leading-normal flex-1 truncate">${chatName}</p>
   `;
   return item;
 }
@@ -22,13 +22,21 @@ document.addEventListener('DOMContentLoaded', () => {
   const chatList = document.getElementById('chatList');
   if (!newChatBtn) return;
 
+  // Load existing chats on startup
+  loadUserChatList().then(chats => {
+    if (!chatList) return;
+    chats.forEach(({ chatID, name }) => {
+      chatList.appendChild(createChatListItem(chatID, name || chatID));
+    });
+  });
+
   newChatBtn.addEventListener('click', async () => {
     try {
       const chatID = await startNewChatWithUser(DEFAULT_PARTNER_UID);
       console.log('New chat started with ID:', chatID);
-      if (chatList) {
-        chatList.appendChild(createChatListItem(chatID));
-      }
+        if (chatList) {
+          chatList.appendChild(createChatListItem(chatID, 'Nuevo chat'));
+        }
       if (window.popupNotifier) {
         popupNotifier.success('Conversación iniciada', 'Chat');
       }
