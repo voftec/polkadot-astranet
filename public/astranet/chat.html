@@ -27,7 +27,7 @@
       <div class="layout-container flex h-full grow flex-col">
         <div class="flex h-full grow">
           <!-- Chat History Panel -->
-          <div class="layout-content-container flex flex-col w-80 min-w-[320px] border-r border-gray-200">
+          <div id="ChatSessionSideBar" class="layout-content-container flex flex-col w-80 min-w-[320px] border-r border-gray-200">
             <div id="contentSideBarLeft" class="flex flex-col flex-1 overflow-y-auto">
               <button id="newChatButton" type="button" class="flex items-center gap-4 bg-white px-4 min-h-14 w-full text-left focus-visible:outline-none">
               <div class="text-[#111418] flex items-center justify-center rounded-lg bg-[#f0f2f5] shrink-0 size-10" data-icon="Plus" data-size="24px" data-weight="regular">
@@ -43,9 +43,9 @@
           </div>
           
           <!-- Main Chat Area -->
-          <div class="layout-content-container flex flex-col flex-1 relative">
+          <div id="ConversationSpace" class="layout-content-container flex flex-col flex-1 relative">
             <!-- Messages Container -->
-            <div class="flex-1 overflow-y-auto flex flex-col-reverse">
+            <div class="flex-1 overflow-y-auto flex flex-col-reverse pb-24">
               <div class="flex flex-col">
                 <div class="flex items-end gap-3 p-4">
                   <div
@@ -71,7 +71,7 @@
             </div>
             
             <!-- Fixed Input Field at Bottom -->
-            <div class="sticky bottom-0 left-0 right-0 bg-white border-t border-gray-200">
+            <div class="absolute bottom-0 left-0 right-0 bg-white border-t border-gray-200">
               <div class="flex items-center px-4 py-3 gap-3">
                 <label class="flex flex-col min-w-40 h-12 flex-1">
                   <div class="flex w-full flex-1 items-stretch rounded-lg h-full">
