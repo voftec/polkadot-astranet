@@ -341,11 +341,11 @@ document.addEventListener('app:userLoggedIn', (event) => {
     } else if (needsVerification) {
          popupNotifier.info('Revisa tu correo para verificar tu cuenta antes de iniciar sesión.', 'Verificar correo');
     } else if (user && user.emailVerified && window.location.pathname.startsWith('/auth/login') && !loginRedirectTriggered) {
-        // Only redirect if login was truly successful, we're on the login page,
-        // and we haven't already triggered the redirect
-          popupNotifier.success('¡Inicio de sesión exitoso! Redirigiendo...', 'Inicio exitoso');
+        popupNotifier.success('¡Inicio de sesión exitoso! Redirigiendo...', 'Inicio exitoso');
         loginRedirectTriggered = true;
-        window.location.href = '/inicio/landing.html';
+        const redirect = sessionStorage.getItem('redirectAfterLogin');
+        if (redirect) sessionStorage.removeItem('redirectAfterLogin');
+        window.location.href = redirect || '/inicio/landing.html';
     }
 });
 

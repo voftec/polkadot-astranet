@@ -1,4 +1,5 @@
 import { startNewChatWithUser } from './astranetSDKChat.js';
+import { isLoggedIn } from '../user-cache.js';
 
 // UID of the default assistant account used for new conversations
 const DEFAULT_PARTNER_UID = 'astranet-assistant';
@@ -18,6 +19,12 @@ function createChatListItem(chatID) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  if (!isLoggedIn()) {
+    sessionStorage.setItem('redirectAfterLogin', window.location.pathname);
+    window.location.href = '/auth/login.html';
+    return;
+  }
+
   const newChatBtn = document.getElementById('newChatButton');
   const chatList = document.getElementById('chatList');
   if (!newChatBtn) return;
