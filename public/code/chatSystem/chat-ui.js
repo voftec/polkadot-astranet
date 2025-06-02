@@ -1,5 +1,27 @@
 import { startNewChatWithUser, loadUserChatList } from './astranetSDKChat.js';
 
+let chatListElement;
+
+/**
+ * Render provided chats in the chat list container.
+ * Clears existing items before rendering.
+ * @param {Array<{chatID: string, name: string}>} chats
+ */
+function renderChatList(chats = []) {
+  if (!chatListElement) return;
+  chatListElement.innerHTML = '';
+  chats.forEach(({ chatID, name }) => {
+    chatListElement.appendChild(
+      createChatListItem(chatID, name || chatID)
+    );
+  });
+}
+
+async function loadAndRenderChatList() {
+  const chats = await loadUserChatList();
+  renderChatList(chats);
+}
+
 // UID of the default assistant account used for new conversations
 const DEFAULT_PARTNER_UID = 'astranet-assistant';
 
@@ -19,24 +41,19 @@ function createChatListItem(chatID, chatName) {
 
 document.addEventListener('DOMContentLoaded', () => {
   const newChatBtn = document.getElementById('newChatButton');
-  const chatList = document.getElementById('chatList');
+  chatListElement = document.getElementById('chatList');
   if (!newChatBtn) return;
 
   // Load existing chats on startup
-  loadUserChatList().then(chats => {
-    if (!chatList) return;
-    chats.forEach(({ chatID, name }) => {
-      chatList.appendChild(createChatListItem(chatID, name || chatID));
-    });
-  });
+  loadAndRenderChatList();
 
   newChatBtn.addEventListener('click', async () => {
     try {
       const chatID = await startNewChatWithUser(DEFAULT_PARTNER_UID);
       console.log('New chat started with ID:', chatID);
-        if (chatList) {
-          chatList.appendChild(createChatListItem(chatID, 'Nuevo chat'));
-        }
+      if (chatListElement) {
+        chatListElement.appendChild(createChatListItem(chatID, 'Nuevo chat'));
+      }
       if (window.popupNotifier) {
         popupNotifier.success('Conversación iniciada', 'Chat');
       }
@@ -47,4 +64,10 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
   });
+});
+
+// Reload chats when the auth state changes
+document.addEventListener('app:userLoggedIn', loadAndRenderChatList);
+document.addEventListener('app:userLoggedOut', () => {
+  if (chatListElement) chatListElement.innerHTML = '';
 });
