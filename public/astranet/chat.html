@@ -8,229 +8,70 @@
       rel="stylesheet"
       as="style"
       onload="this.rel='stylesheet'"
-      href="https://fonts.googleapis.com/css2?display=swap&amp;family=Inter%3Awght%40400%3B500%3B700%3B900&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900"
+      href="https://fonts.googleapis.com/css2?display=swap&family=Inter%3Awght%40400%3B500%3B700%3B900&family=Noto+Sans%3Awght%40400%3B500%3B700%3B900"
     />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Removed redundant Inter link -->
     <title>Polkadot Astranet - Chat</title>
     <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64," />
     <link rel="stylesheet" href="../assets/css/navbar.css">
+    <link rel="stylesheet" href="../assets/css/chat/chat.css"> <!-- This is where the new CSS will go -->
     <link rel="stylesheet" href="../assets/css/popup-notify/popup-notify.css">
-    <link rel="stylesheet" href="../assets/css/tailwind-replacement.css">
-    <script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-database.js"></script>
+    <!-- Icon library for Send button (Feather Icons example) -->
+    <script src="https://unpkg.com/feather-icons"></script>
   </head>
   <body>
-    <div class="relative flex size-full min-h-screen flex-col bg-white group/design-root overflow-x-hidden" style='font-family: "Inter", "Noto Sans", sans-serif;'>
-      <!-- Navigation Bar Container -->
-      <div id="navbar-container"></div>
-      
-      <div class="layout-container flex h-full grow flex-col">
-        <div class="flex h-full grow">
-          <!-- Chat History Panel -->
-          <div id="ChatSessionSideBar" class="layout-content-container flex flex-col w-80 min-w-[320px] border-r border-gray-200">
-            <div id="contentSideBarLeft" class="flex flex-col flex-1 overflow-y-auto">
-              <button id="newChatButton" type="button" class="flex items-center gap-4 bg-white px-4 min-h-14 w-full text-left focus-visible:outline-none">
-              <div class="text-[#111418] flex items-center justify-center rounded-lg bg-[#f0f2f5] shrink-0 size-10" data-icon="Plus" data-size="24px" data-weight="regular">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
-                  <path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"></path>
-                </svg>
-              </div>
-              <span class="text-[#111418] text-base font-normal leading-normal flex-1 truncate">New Chat</span>
-            </button>
-            <div id="chatList">
-            
-          </div>
-          </div>
-          
-          <!-- Main Chat Area -->
-          <div id="ConversationSpace" class="layout-content-container flex flex-col flex-1 relative">
-            <!-- Messages Container -->
-            <div class="flex-1 overflow-y-auto flex flex-col-reverse pb-24">
-              <div class="flex flex-col">
-                <div class="flex items-end gap-3 p-4">
-                  <div
-                    class="bg-center bg-no-repeat aspect-square bg-cover rounded-full w-10 shrink-0"
-                    style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCkhXGmZ423C1CGDao1K15ZBYn7HBX8yGf_l25J0F8YS5DfjmwI9jbCoUTxO7-6a31PFGa8NBcMNfO3y-Z1O1GGnxGN9i3wXNNCfp-4uX3I3qHcs9zTxF2IX73Cn57pjZZkcZ47qDIX8NB8Q9qI6H8YRKOaOsg4a8NrWBuGgVPR5q4-khNWerZBnaXv5K2QWeawFlZi1KwjtF9zXQT6bW35CErrheQFyG6RRdb7V65W5OndPeaMULV9ZDoPNNAwyEvIpKZ1sGMtAXIi");'
-                  ></div>
-                  <div class="flex flex-1 flex-col gap-1 items-start">
-                    <p class="text-[#60758a] text-[13px] font-normal leading-normal max-w-[360px]">Assistant</p>
-                    <p class="text-base font-normal leading-normal flex max-w-[360px] rounded-lg px-4 py-3 bg-[#f0f2f5] text-[#111418]">Hello! How can I assist you today?</p>
-                  </div>
-                </div>
-                <div class="flex items-end gap-3 p-4 justify-end">
-                  <div class="flex flex-1 flex-col gap-1 items-end">
-                    <p class="text-[#60758a] text-[13px] font-normal leading-normal max-w-[360px] text-right">User</p>
-                    <p class="text-base font-normal leading-normal flex max-w-[360px] rounded-lg px-4 py-3 bg-[#3490f3] text-white">Hi there! I need help with a coding problem.</p>
-                  </div>
-                  <div
-                    class="bg-center bg-no-repeat aspect-square bg-cover rounded-full w-10 shrink-0"
-                    style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBBQwT6tuJxNpABCli2tWIw2O_3rlBaH8fZbUbW4X5AbYH0y1gHx9rfGLn7yrzQZdUyDe1U-24zYGwLui9xQpwC-CMHjjguWRcKZadd-RWGo5QrBv1OE4HFyxatqjg8SXzUfgRhMvOrtoSJaEuHK7_tEI0pjUEmfDEbgUieFFfHy9WFwB49HRInZD36v8Yt9nAEboF2RAvAlDsxm8mqXFVt0oyr294WwS-tKR1191YdgDADe7x8Vdf_pUAeZWRNOJSEq1CgCI5u4J3z");'
-                  ></div>
-                </div>
-              </div>
-            </div>
-            
-            <!-- Fixed Input Field at Bottom -->
-            <div class="absolute bottom-0 left-0 right-0 bg-white border-t border-gray-200">
-              <div class="flex items-center px-4 py-3 gap-3">
-                <label class="flex flex-col min-w-40 h-12 flex-1">
-                  <div class="flex w-full flex-1 items-stretch rounded-lg h-full">
-                    <input
-                      placeholder="Type a message..."
-                      class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#111418] focus:outline-0 focus:ring-0 border-none bg-[#f0f2f5] focus:border-none h-full placeholder:text-[#60758a] px-4 rounded-r-none border-r-0 pr-2 text-base font-normal leading-normal"
-                      value=""
-                    />
-                    <div class="flex border-none bg-[#f0f2f5] items-center justify-center pr-4 rounded-r-lg border-l-0 !pr-2">
-                      <div class="flex items-center gap-4 justify-end">
-                        <button class="min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-8 px-4 bg-[#3490f3] text-white text-sm font-medium leading-normal">
-                          <span class="truncate">Send</span>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </label>
-              </div>
-            </div>
+    <div id="navbar-container">
+        <!-- Assume navbar.js populates this. Give it a fixed height in navbar.css -->
+        <!-- e.g., #navbar-container { height: 60px; background: #1a1d21; color: white; display:flex; align-items:center; padding: 0 20px; } -->
+    </div>
+
+    <div id="workspace-container">
+      <div id="left-panel">
+        <div id="chat-header">
+          <div id="chat-header-title">Chat</div>
+          <button id="new-chat-button">
+            <i data-feather="plus-circle" class="button-icon"></i>New Chat
+          </button>
+        </div>
+        <div id="scroll-container">
+          <div id="chat-list">
+            <!-- Chat items will be populated here by JS -->
           </div>
         </div>
       </div>
+
+      <div id="right-panel">
+        <div id="chat-interface-placeholder">
+            <i data-feather="message-circle" class="placeholder-icon"></i>
+            <p>Select a conversation to start messaging</p>
+            <p>or create a <span id="placeholder-new-chat" class="link-lookalike">new chat</span>.</p>
+        </div>
+        <div id="active-chat-area" class="hidden">
+            <div id="active-chat-header">
+                <span id="active-chat-name">Chat Name</span>
+                <!-- Add more participant info or options here later -->
+            </div>
+            <div id="message-area">
+              <div id="chat-list"></div>
+                <!-- Messages will be populated here -->
+            </div>
+            <div id="message-input-container">
+              <input type="text" id="message-input" placeholder="Type your message, J.A.R.V.I.S. is listening..." />
+              <button id="send-message-button">
+                <i data-feather="send"></i>
+              </button>
+            </div>
+        </div>
+      </div>
     </div>
+
     <script src="../code/popup-notify.js"></script>
     <script type="module" src="../code/navbar.js" defer></script>
     <script type="module" src="../code/auth.js"></script>
     <script type="module" src="../code/chatSystem/chat-ui.js"></script>
+
     <script>
-      // Initialize Firebase (you'll need to add your Firebase config)
-      const firebaseConfig = {
-        apiKey: "your-api-key",
-        authDomain: "your-auth-domain",
-        projectId: "your-project-id",
-        storageBucket: "your-storage-bucket",
-        messagingSenderId: "your-messaging-sender-id",
-        appId: "your-app-id",
-        databaseURL: "your-database-url"
-      };
-      
-      // Initialize Firebase
-      firebase.initializeApp(firebaseConfig);
-      const database = firebase.database();
-      
-      // Get DOM elements
-      const messageInput = document.querySelector('input[placeholder="Type a message..."]');
-      const messagesContainer = document.querySelector('.flex-1.overflow-y-auto');
-      const sendButton = document.querySelector('button span.truncate');
-      
-      // Function to format timestamp
-      function getFormattedTimestamp() {
-        return new Date().toISOString();
-      }
-      
-      // Function to save conversation to Firebase
-      async function saveConversation(message, isUser = true) {
-        const conversationRef = database.ref('conversations').push();
-        await conversationRef.set({
-          message,
-          isUser,
-          timestamp: getFormattedTimestamp(),
-          metadata: {
-            platform: 'web',
-            version: '1.0'
-          }
-        });
-      }
-      
-      // Function to export conversations to file
-      async function exportConversations() {
-        const conversationsRef = database.ref('conversations');
-        const snapshot = await conversationsRef.once('value');
-        const conversations = snapshot.val();
-        
-        // Format conversations for AI training
-        const formattedConversations = Object.entries(conversations).map(([id, data]) => ({
-          id,
-          ...data,
-          // Add any additional formatting needed for AI training
-        }));
-        
-        // Create and download file
-        const blob = new Blob([JSON.stringify(formattedConversations, null, 2)], {
-          type: 'application/json'
-        });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `conversations_${new Date().toISOString()}.json`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-      }
-      
-      // Function to add message to UI
-      function addMessageToUI(message, isUser = true) {
-        const messageHTML = `
-          <div class="flex items-end gap-3 p-4 ${isUser ? 'justify-end' : ''}">
-            ${!isUser ? `
-              <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full w-10 shrink-0"
-                style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCkhXGmZ423C1CGDao1K15ZBYn7HBX8yGf_l25J0F8YS5DfjmwI9jbCoUTxO7-6a31PFGa8NBcMNfO3y-Z1O1GGnxGN9i3wXNNCfp-4uX3I3qHcs9zTxF2IX73Cn57pjZZkcZ47qDIX8NB8Q9qI6H8YRKOaOsg4a8NrWBuGgVPR5q4-khNWerZBnaXv5K2QWeawFlZi1KwjtF9zXQT6bW35CErrheQFyG6RRdb7V65W5OndPeaMULV9ZDoPNNAwyEvIpKZ1sGMtAXIi");'
-              ></div>
-            ` : ''}
-            <div class="flex flex-1 flex-col gap-1 items-${isUser ? 'end' : 'start'}">
-              <p class="text-[#60758a] text-[13px] font-normal leading-normal max-w-[360px] ${isUser ? 'text-right' : ''}">${isUser ? 'User' : 'Assistant'}</p>
-              <p class="text-base font-normal leading-normal flex max-w-[360px] rounded-lg px-4 py-3 ${isUser ? 'bg-[#3490f3] text-white' : 'bg-[#f0f2f5] text-[#111418]'}">${message}</p>
-            </div>
-            ${isUser ? `
-              <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full w-10 shrink-0"
-                style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBBQwT6tuJxNpABCli2tWIw2O_3rlBaH8fZbUbW4X5AbYH0y1gHx9rfGLn7yrzQZdUyDe1U-24zYGwLui9xQpwC-CMHjjguWRcKZadd-RWGo5QrBv1OE4HFyxatqjg8SXzUfgRhMvOrtoSJaEuHK7_tEI0pjUEmfDEbgUieFFfHy9WFwB49HRInZD36v8Yt9nAEboF2RAvAlDsxm8mqXFVt0oyr294WwS-tKR1191YdgDADe7x8Vdf_pUAeZWRNOJSEq1CgCI5u4J3z");'
-              ></div>
-            ` : ''}
-          </div>
-        `;
-        
-        const messagesWrapper = messagesContainer.querySelector('.flex.flex-col');
-        messagesWrapper.insertAdjacentHTML('afterbegin', messageHTML);
-      }
-      
-      // Function to handle sending message
-      async function handleSendMessage() {
-        const message = messageInput.value.trim();
-        if (!message) return;
-        
-        // Add user message to UI
-        addMessageToUI(message, true);
-        
-        // Save to Firebase
-        await saveConversation(message, true);
-        
-        // Clear input
-        messageInput.value = '';
-        
-        // Simulate AI response (replace with actual AI integration)
-        setTimeout(async () => {
-          const aiResponse = "I understand your message. This is a simulated response. In a real implementation, this would be connected to an AI service.";
-          addMessageToUI(aiResponse, false);
-          await saveConversation(aiResponse, false);
-        }, 1000);
-      }
-      
-      // Event Listeners
-      messageInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-          e.preventDefault();
-          handleSendMessage();
-        }
-      });
-      
-      sendButton.addEventListener('click', handleSendMessage);
-      
-      // Add export button to the UI
-      const exportButton = document.createElement('button');
-      exportButton.className = 'min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-8 px-4 bg-[#3490f3] text-white text-sm font-medium leading-normal ml-2';
-      exportButton.innerHTML = '<span class="truncate">Export Chats</span>';
-      exportButton.addEventListener('click', exportConversations);
-      
-      // Add the export button next to the send button
-      sendButton.parentElement.parentElement.appendChild(exportButton);
+      feather.replace(); // Initialize Feather Icons
     </script>
   </body>
 </html>
