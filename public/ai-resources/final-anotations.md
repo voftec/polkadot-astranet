@@ -1,0 +1,1 @@
+for testing should be used in Kusama, Polkadot’s canary network, before joining Polkadot.

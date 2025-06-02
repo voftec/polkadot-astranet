@@ -10,32 +10,33 @@ import { getUser, getAuthUser, getProfile } from './user-cache.js';
 
   // --- CONFIGURATION ---
   const PAGE_URLS = Object.freeze([
-    '/inicio/landing.html',            // 0: Home
-    '/datasets/gallery.html',          // 1: Datasets
-    '/astranet/chat.html',             // 2: Astranet Chat
-    '/education.html',                 // 3: Education (NEW)
-    '/resources.html',                 // 4: Resources (NEW)
-    '/auth/login.html',                // 5: Login
-    '/code/hackatonGuide.html'         // 6: Hackathon Guide
+    '/auth/login.html',        // 0: Login
+    '/education/glosary/index.html', // 1: Glossary (under Education)
+    '/roadmap/roadmap.html',  // 2: Roadmap
   ]);
-  const HOME_PAGE_INDEX = 0;
-  const LOGIN_PAGE_INDEX = 5;
+  const LOGIN_PAGE_INDEX = 0;
+  const EDUCATION_PAGE_INDEX = 1;
+  const ROADMAP_PAGE_INDEX = 2;
 
   // --- HTML TEMPLATES ---
   const NAVBAR_HTML = `
     <nav class="navbar" id="navbar">
       <div class="navbar-left">
-        <a href="${PAGE_URLS[HOME_PAGE_INDEX]}" class="navbar-brand">Polkadot Astranet</a>
+        <a href="/inicio/landing.html" class="navbar-brand">Polkadot Astranet</a>
       </div>
       <button class="hamburger-menu" id="hamburgerMenuButton" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="navbar-right-menu">
         <span class="bar"></span><span class="bar"></span><span class="bar"></span>
       </button>
       <div class="navbar-right" id="navbar-right-menu">
-        <button id="nav-datasets" data-page-index="1">Datasets</button>
-        <button id="nav-chat" data-page-index="2">Astranet Chat</button>
-        <button id="nav-education" data-page-index="3">Education</button>
-        <button id="nav-resources" data-page-index="4">Resources</button>
-        <button id="nav-hackathon" data-page-index="6">Hackathon Guide</button>
+        <button id="nav-login" data-page-index="0">Login</button>
+        <div class="nav-group" id="education-group">
+          <button id="education-button" aria-haspopup="true" aria-expanded="false">Education</button>
+          <div class="nav-dropdown" id="education-dropdown">
+            <button id="nav-glossary" data-page-index="1">Glossary</button>
+            <!-- Add more education platform pages here as needed -->
+          </div>
+        </div>
+        <button id="nav-roadmap" data-page-index="2">Roadmap</button>
         <div id="user-section"><!-- User-specific content --></div>
       </div>
     </nav>
@@ -88,10 +89,12 @@ import { getUser, getAuthUser, getProfile } from './user-cache.js';
     });
 
     if (currentPageIndex === -1) { // Fallback for direct section access
-      if (normalizedPath.startsWith('/newsletter')) currentPageIndex = 3;
-      else if (normalizedPath.startsWith('/herramientas')) currentPageIndex = 4;
+      if (normalizedPath.startsWith('/education')) currentPageIndex = EDUCATION_PAGE_INDEX;
+      else if (normalizedPath.startsWith('/roadmap')) currentPageIndex = ROADMAP_PAGE_INDEX;
+      else if (normalizedPath.startsWith('/newsletter')) currentPageIndex = EDUCATION_PAGE_INDEX;
+      else if (normalizedPath.startsWith('/herramientas')) currentPageIndex = EDUCATION_PAGE_INDEX;
       else if (normalizedPath.startsWith('/blog')) currentPageIndex = LOGIN_PAGE_INDEX;
-      else if (normalizedPath.startsWith('/prompts')) currentPageIndex = 3;
+      else if (normalizedPath.startsWith('/prompts')) currentPageIndex = EDUCATION_PAGE_INDEX;
       else if (normalizedPath.startsWith('/auth/login')) currentPageIndex = LOGIN_PAGE_INDEX;
       else currentPageIndex = null;
     }
@@ -100,9 +103,12 @@ import { getUser, getAuthUser, getProfile } from './user-cache.js';
   function _highlightActivePage() {
     if (!navMenuElement) return;
     navMenuElement.querySelectorAll('[data-page-index]').forEach(btn => btn.classList.remove('active'));
+    const educationBtn = document.getElementById('education-button');
+    educationBtn?.classList.remove('active');
     if (currentPageIndex !== null) {
       const activeBtn = navMenuElement.querySelector(`[data-page-index="${currentPageIndex}"]`);
       activeBtn?.classList.add('active');
+      if ([EDUCATION_PAGE_INDEX, ROADMAP_PAGE_INDEX].includes(currentPageIndex)) educationBtn?.classList.add('active');
     }
   }
 
@@ -168,6 +174,23 @@ import { getUser, getAuthUser, getProfile } from './user-cache.js';
         navMenuElement.classList.remove('active');
         hamburgerButtonElement.classList.remove('active');
         hamburgerButtonElement.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
+
+  function _attachConceptsDropdownEvents() {
+    const group = document.getElementById('education-group');
+    const button = document.getElementById('education-button');
+    if (!group || !button) return;
+    button.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = group.classList.toggle('open');
+      button.setAttribute('aria-expanded', isOpen.toString());
+    });
+    document.addEventListener('click', (e) => {
+      if (!group.contains(e.target)) {
+        group.classList.remove('open');
+        button.setAttribute('aria-expanded', 'false');
       }
     });
   }
@@ -284,7 +307,7 @@ import { getUser, getAuthUser, getProfile } from './user-cache.js';
     hamburgerButtonElement = document.getElementById('hamburgerMenuButton');
     userSectionElement = document.getElementById('user-section');
     creatorsbayBtnElement = document.querySelector('.creatorsbay-cta-btn');
-    _attachMainNavigationEvents(); _attachHamburgerMenuEvents();
+    _attachMainNavigationEvents(); _attachHamburgerMenuEvents(); _attachConceptsDropdownEvents();
     _detectCurrentPage(); _highlightActivePage(); _renderUserSection();
     _insertFtueModal(); _setupAuthEventListeners();
     _updateCreatorBayCtaVisibility();

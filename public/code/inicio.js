@@ -82,3 +82,89 @@ function toggleMenu() {
   } else {
       console.error("Search input or button not found!");
   }
+
+const PAGE_URLS = [
+  '/auth/login.html',
+  '/education/glosary/index.html',
+  '/roadmap/roadmap.html',
+];
+
+const PAGE_LABELS = [
+  'Login',
+  'Education',
+  'Roadmap',
+];
+
+function renderNavButtons() {
+  let navContainer = document.getElementById('custom-nav-buttons');
+  if (!navContainer) {
+    navContainer = document.createElement('nav');
+    navContainer.id = 'custom-nav-buttons';
+    navContainer.setAttribute('aria-label', 'Main Navigation');
+    navContainer.style.display = 'flex';
+    navContainer.style.gap = '1rem';
+    navContainer.style.justifyContent = 'center';
+    navContainer.style.margin = '2rem 0';
+    document.body.insertBefore(navContainer, document.body.firstChild.nextSibling);
+  } else {
+    navContainer.innerHTML = '';
+  }
+
+  // Login button
+  const loginBtn = document.createElement('button');
+  loginBtn.textContent = 'Login';
+  loginBtn.className = 'nav-btn';
+  loginBtn.setAttribute('tabindex', '0');
+  loginBtn.setAttribute('aria-label', 'Login');
+  loginBtn.onclick = () => window.location.href = PAGE_URLS[0];
+  navContainer.appendChild(loginBtn);
+
+  // Education dropdown
+  const eduGroup = document.createElement('div');
+  eduGroup.className = 'nav-group';
+  eduGroup.style.position = 'relative';
+  const eduBtn = document.createElement('button');
+  eduBtn.textContent = 'Education';
+  eduBtn.className = 'nav-btn';
+  eduBtn.setAttribute('aria-haspopup', 'true');
+  eduBtn.setAttribute('aria-expanded', 'false');
+  eduBtn.onclick = (e) => {
+    e.stopPropagation();
+    const isOpen = eduGroup.classList.toggle('open');
+    eduBtn.setAttribute('aria-expanded', isOpen.toString());
+  };
+  eduGroup.appendChild(eduBtn);
+  const eduDropdown = document.createElement('div');
+  eduDropdown.className = 'nav-dropdown';
+  const glossaryBtn = document.createElement('button');
+  glossaryBtn.textContent = 'Glossary';
+  glossaryBtn.className = 'nav-btn';
+  glossaryBtn.onclick = () => window.location.href = PAGE_URLS[1];
+  eduDropdown.appendChild(glossaryBtn);
+  // Add more education platform buttons here if needed
+  eduGroup.appendChild(eduDropdown);
+  navContainer.appendChild(eduGroup);
+
+  // Roadmap button
+  const roadmapBtn = document.createElement('button');
+  roadmapBtn.textContent = 'Roadmap';
+  roadmapBtn.className = 'nav-btn';
+  roadmapBtn.setAttribute('tabindex', '0');
+  roadmapBtn.setAttribute('aria-label', 'Roadmap');
+  roadmapBtn.onclick = () => window.location.href = PAGE_URLS[2];
+  navContainer.appendChild(roadmapBtn);
+
+  // Close dropdown on click outside
+  document.addEventListener('click', (e) => {
+    if (!eduGroup.contains(e.target)) {
+      eduGroup.classList.remove('open');
+      eduBtn.setAttribute('aria-expanded', 'false');
+    }
+  });
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', renderNavButtons);
+} else {
+  renderNavButtons();
+}

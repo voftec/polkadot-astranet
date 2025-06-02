@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Educational platform for learning about Polkadot blockchain technologies, PVM, and smart contract development">
+    <meta name="keywords" content="Polkadot, blockchain, PVM, smart contracts, web3, cryptocurrency, parachains">
+    <title>Polkadot Educational Platform</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/polkadot-logo.png">
+    
+    <!-- Google Fonts - Unbounded -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container header-container">
+            <div class="logo">
+                <img src="assets/polkadot-logo.png" alt="Polkadot Logo">
+                <span class="logo-text">Polkadot Education</span>
+            </div>
+            
+            <nav class="nav">
+                <ul class="nav-list" id="navList">
+                    <li class="nav-item"><a href="#home" class="nav-link active">Home</a></li>
+                    <li class="nav-item"><a href="#learn" class="nav-link">Learn</a></li>
+                    <li class="nav-item"><a href="#explorer" class="nav-link">Explorer</a></li>
+                    <li class="nav-item"><a href="#deploy" class="nav-link">Deploy</a></li>
+                    <li class="nav-item"><a href="#dashboard" class="nav-link">Dashboard</a></li>
+                </ul>
+                
+                <button class="dark-mode-toggle" id="darkModeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+                
+                <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <div class="auth-buttons" id="authButtons">
+                    <button class="btn btn-outline" id="loginBtn">Login</button>
+                    <button class="btn btn-primary" id="signupBtn">Sign Up</button>
+                </div>
+                
+                <div class="user-profile" id="userProfile" style="display: none;">
+                    <img src="" alt="User Profile" id="userProfileImg">
+                    <span id="userName"></span>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <h1>Learn Polkadot Blockchain Technology</h1>
+            <p>Discover the power of Polkadot's interoperable blockchain ecosystem, learn about the Polkadot Virtual Machine (PVM), and build your own smart contracts.</p>
+            <div class="hero-buttons">
+                <a href="#learn" class="btn btn-outline">Start Learning</a>
+                <a href="#deploy" class="btn btn-primary">Deploy a Contract</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="section bg-light">
+        <div class="container">
+            <h2 class="section-title">Why Learn Polkadot?</h2>
+            <p class="section-subtitle">Polkadot is revolutionizing blockchain technology with its unique architecture and capabilities.</p>
+            
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">
+                        <i class="fas fa-link"></i>
+                    </div>
+                    <h3>Interoperability</h3>
+                    <p>Connect and communicate between different blockchain networks seamlessly.</p>
+                </div>
+                
+                <div class="feature">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Shared Security</h3>
+                    <p>Benefit from the security of the entire network through the Relay Chain.</p>
+                </div>
+                
+                <div class="feature">
+                    <div class="feature-icon">
+                        <i class="fas fa-tachometer-alt"></i>
+                    </div>
+                    <h3>Scalability</h3>
+                    <p>Process multiple transactions in parallel across different parachains.</p>
+                </div>
+                
+                <div class="feature">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Governance</h3>
+                    <p>Participate in on-chain governance with the DOT token.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Learning Section -->
+    <section class="section" id="learn">
+        <div class="container">
+            <h2 class="section-title">Educational Content</h2>
+            <p class="section-subtitle">Explore our comprehensive learning materials about Polkadot and blockchain technology.</p>
+            
+            <div class="content-tabs">
+                <button class="tab-button active" data-tab="basics">Basics</button>
+                <button class="tab-button" data-tab="architecture">Architecture</button>
+                <button class="tab-button" data-tab="pvm">PVM</button>
+                <button class="tab-button" data-tab="smart-contracts">Smart Contracts</button>
+                <button class="tab-button" data-tab="interoperability">Interoperability</button>
+            </div>
+            
+            <!-- Basics Tab -->
+            <div class="tab-content active" id="basics-content">
+                <h3>Introduction to Polkadot</h3>
+                <p>Polkadot is a next-generation blockchain protocol that connects multiple specialized blockchains into a unified network. Designed to solve the scalability and interoperability challenges faced by earlier blockchain platforms, Polkadot enables cross-blockchain transfers of any type of data or asset.</p>
+                
+                <div class="row">
+                    <div class="col">
+                        <h4>Key Concepts</h4>
+                        <ul>
+                            <li>Relay Chain: The central chain of Polkadot</li>
+                            <li>Parachains: Specialized blockchains that connect to the Relay Chain</li>
+                            <li>DOT Token: The native cryptocurrency of the Polkadot network</li>
+                            <li>Validators: Nodes that secure the network</li>
+                            <li>Nominators: DOT holders who select validators</li>
+                        </ul>
+                    </div>
+                    <div class="col">
+                        <img src="assets/polkadot-architecture.png" alt="Polkadot Architecture" class="img-fluid">
+                    </div>
+                </div>
+                
+                <div class="interactive-demo">
+                    <h4>Interactive Quiz: Polkadot Basics</h4>
+                    <div class="quiz" id="basicsQuiz">
+                        <!-- Quiz content will be dynamically loaded -->
+                        <p>Test your knowledge of Polkadot basics with our interactive quiz.</p>
+                        <button class="btn btn-primary" id="startBasicsQuiz">Start Quiz</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Architecture Tab -->
+            <div class="tab-content" id="architecture-content">
+                <h3>Polkadot Architecture</h3>
+                <p>Polkadot's architecture is designed to be scalable, interoperable, and secure. It consists of several key components that work together to create a robust blockchain ecosystem.</p>
+                
+                <div class="row">
+                    <div class="col">
+                        <h4>Relay Chain</h4>
+                        <p>The Relay Chain is the central chain of the Polkadot network. It is responsible for the network's shared security, consensus, and cross-chain interoperability. The Relay Chain has minimal functionality by design – its primary purpose is to coordinate the system as a whole, including parachains.</p>
+                        
+                        <h4>Parachains</h4>
+                        <p>Parachains are specialized blockchains that connect to the Relay Chain. Each parachain can be optimized for specific use cases, with their own governance, tokens, and features. Parachains benefit from the shared security of the Relay Chain.</p>
+                    </div>
+                    <div class="col">
+                        <img src="assets/polkadot-parachain.png" alt="Polkadot Parachain" class="img-fluid">
+                    </div>
+                </div>
+                
+                <h4>Consensus Mechanism</h4>
+                <p>Polkadot uses a hybrid consensus system that separates block production from finality. It combines:</p>
+                <ul>
+                    <li><strong>BABE (Blind Assignment for Blockchain Extension)</strong>: For block production</li>
+                    <li><strong>GRANDPA (GHOST-based Recursive Ancestor Deriving Prefix Agreement)</strong>: For block finalization</li>
+                </ul>
+                
+                <div class="interactive-demo">
+                    <h4>Interactive Diagram: Polkadot Network</h4>
+                    <div id="architectureDiagram" class="diagram">
+                        <!-- Interactive diagram will be loaded here -->
+                        <p>Explore the Polkadot architecture with our interactive diagram.</p>
+                        <button class="btn btn-primary" id="loadArchitectureDiagram">Load Diagram</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- PVM Tab -->
+            <div class="tab-content" id="pvm-content">
+                <h3>Polkadot Virtual Machine (PVM)</h3>
+                <p>The Polkadot Virtual Machine (PVM) is a RISC-V-based execution environment designed for smart contract execution and blockchain operations within the Polkadot ecosystem.</p>
+                
+                <div class="row">
+                    <div class="col">
+                        <h4>Key Features of PVM</h4>
+                        <ul>
+                            <li>Based on the RISC-V instruction set architecture</li>
+                            <li>Achieves approximately 45% of native x64 speed</li>
+                            <li>Highly customizable and modular design</li>
+                            <li>Enables deterministic execution of smart contracts</li>
+                            <li>Supports cross-chain interoperability</li>
+                        </ul>
+                    </div>
+                    <div class="col">
+                        <div class="code-block">
+                            <pre><code>// Example of PVM interaction
+const pvm = new PVMInstance();
+await pvm.initialize();
+
+// Execute contract code
+const result = await pvm.execute(contractCode, {
+  input: inputData,
+  gas: 1000000
+});
+
+console.log("Execution result:", result);</code></pre>
+                        </div>
+                    </div>
+                </div>
+                
+                <h4>Comparison with Other Virtual Machines</h4>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>PVM</th>
+                            <th>EVM (Ethereum)</th>
+                            <th>WASM</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Architecture</td>
+                            <td>RISC-V based</td>
+                            <td>Stack-based</td>
+                            <td>Binary instruction format</td>
+                        </tr>
+                        <tr>
+                            <td>Performance</td>
+                            <td>~45% of native speed</td>
+                            <td>Slower</td>
+                            <td>Near-native speed</td>
+                        </tr>
+                        <tr>
+                            <td>Language Support</td>
+                            <td>Multiple languages</td>
+                            <td>Solidity, Vyper</td>
+                            <td>Multiple languages</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Smart Contracts Tab -->
+            <div class="tab-content" id="smart-contracts-content">
+                <h3>Smart Contract Development</h3>
+                <p>Polkadot offers multiple approaches for developing and deploying smart contracts, providing flexibility for developers with different preferences and requirements.</p>
+                
+                <div class="row">
+                    <div class="col">
+                        <h4>ink! Smart Contracts</h4>
+                        <p>ink! is a Rust-based programming language for writing smart contracts on Polkadot. It compiles to WebAssembly (Wasm) and is designed to be familiar to Rust developers.</p>
+                        
+                        <div class="code-block">
+                            <pre><code>#[ink::contract]
+mod flipper {
+    #[ink(storage)]
+    pub struct Flipper {
+        value: bool,
+    }
+
+    impl Flipper {
+        #[ink(constructor)]
+        pub fn new(init_value: bool) -> Self {
+            Self { value: init_value }
+        }
+
+        #[ink(message)]
+        pub fn flip(&mut self) {
+            self.value = !self.value;
+        }
+
+        #[ink(message)]
+        pub fn get(&self) -> bool {
+            self.value
+        }
+    }
+}</code></pre>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <h4>EVM Compatibility</h4>
+                        <p>Polkadot also supports Ethereum Virtual Machine (EVM) compatibility, allowing developers to write smart contracts in Solidity and deploy them on Polkadot-compatible chains.</p>
+                        
+                        <div class="code-block">
+                            <pre><code>pragma solidity ^0.8.0;
+
+contract Flipper {
+    bool private value;
+    
+    constructor(bool initValue) {
+        value = initValue;
+    }
+    
+    function flip() public {
+        value = !value;
+    }
+    
+    function get() public view returns (bool) {
+        return value;
+    }
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="interactive-demo">
+                    <h4>Smart Contract Sandbox</h4>
+                    <p>Try writing and testing a simple smart contract in our interactive sandbox.</p>
+                    <div id="contractSandbox" class="sandbox">
+                        <div class="sandbox-controls">
+                            <select id="contractLanguage">
+                                <option value="ink">ink! (Rust)</option>
+                                <option value="solidity">Solidity</option>
+                            </select>
+                            <button class="btn btn-primary" id="runContract">Run Contract</button>
+                        </div>
+                        <div class="sandbox-editor" id="contractEditor">
+                            <!-- Code editor will be loaded here -->
+                        </div>
+                        <div class="sandbox-output" id="contractOutput">
+                            <!-- Output will be displayed here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Interoperability Tab -->
+            <div class="tab-content" id="interoperability-content">
+                <h3>Cross-Chain Interoperability</h3>
+                <p>One of Polkadot's core features is its ability to enable communication between different blockchain networks. This interoperability is achieved through several mechanisms.</p>
+                
+                <div class="row">
+                    <div class="col">
+                        <h4>Cross-Consensus Messaging (XCM)</h4>
+                        <p>XCM is a messaging format designed to allow different consensus systems to communicate with each other. It enables the transfer of data, assets, and instructions between different parachains and even external blockchains.</p>
+                        
+                        <h4>Blockchain Bridges</h4>
+                        <p>Bridges connect Polkadot to external blockchain networks like Ethereum, Bitcoin, and others. They allow for the transfer of tokens and data between these networks.</p>
+                    </div>
+                    <div class="col">
+                        <img src="assets/polkadot-xcmp.png" alt="Polkadot Cross-Chain Messaging" class="img-fluid">
+                    </div>
+                </div>
+                
+                <h4>Use Cases for Cross-Chain Communication</h4>
+                <ul>
+                    <li><strong>Token Transfers</strong>: Move tokens between different blockchain networks</li>
+                    <li><strong>Data Exchange</strong>: Share information across blockchains</li>
+                    <li><strong>Cross-Chain Smart Contracts</strong>: Execute contracts that interact with multiple chains</li>
+                    <li><strong>Decentralized Applications</strong>: Build dApps that leverage multiple blockchain networks</li>
+                </ul>
+                
+                <div class="interactive-demo">
+                    <h4>Interactive Demo: Cross-Chain Transfer</h4>
+                    <p>Explore how assets can be transferred between different parachains in the Polkadot ecosystem.</p>
+                    <div id="crossChainDemo" class="demo">
+                        <!-- Interactive demo will be loaded here -->
+                        <button class="btn btn-primary" id="startCrossChainDemo">Start Demo</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blockchain Explorer Section -->
+    <section class="section bg-light" id="explorer">
+        <div class="container">
+            <h2 class="section-title">Blockchain Explorer</h2>
+            <p class="section-subtitle">Explore the Polkadot blockchain network, view transactions, blocks, and more.</p>
+            
+            <div class="explorer-container">
+                <div class="explorer-search">
+                    <div class="form-group">
+                        <label for="explorerSearch" class="form-label">Search by Block, Transaction, or Account</label>
+                        <div class="search-input-group">
+                            <input type="text" id="explorerSearch" class="form-control" placeholder="Enter block number, transaction hash, or account address">
+                            <button class="btn btn-primary" id="searchBtn">Search</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="explorer-tabs">
+                    <button class="tab-button active" data-explorer-tab="blocks">Blocks</button>
+                    <button class="tab-button" data-explorer-tab="transactions">Transactions</button>
+                    <button class="tab-button" data-explorer-tab="accounts">Accounts</button>
+                    <button class="tab-button" data-explorer-tab="validators">Validators</button>
+                </div>
+                
+                <div class="explorer-content active" id="blocks-content">
+                    <h3>Latest Blocks</h3>
+                    <div class="explorer-table-container">
+                        <table class="table" id="blocksTable">
+                            <thead>
+                                <tr>
+                                    <th>Block Number</th>
+                                    <th>Hash</th>
+                                    <th>Time</th>
+                                    <th>Transactions</th>
+                                    <th>Validator</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Block data will be loaded dynamically -->
+                                <tr>
+                                    <td colspan="5" class="text-center">Loading block data...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="explorer-content" id="transactions-content">
+                    <h3>Recent Transactions</h3>
+                    <div class="explorer-table-container">
+                        <table class="table" id="transactionsTable">
+                            <thead>
+                                <tr>
+                                    <th>Hash</th>
+                                    <th>Block</th>
+                                    <th>From</th>
+                                    <th>To</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Transaction data will be loaded dynamically -->
+                                <tr>
+                                    <td colspan="5" class="text-center">Loading transaction data...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="explorer-content" id="accounts-content">
+                    <h3>Top Accounts</h3>
+                    <div class="explorer-table-container">
+                        <table class="table" id="accountsTable">
+                            <thead>
+                                <tr>
+                                    <th>Rank</th>
+                                    <th>Address</th>
+                                    <th>Balance</th>
+                                    <th>Transactions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Account data will be loaded dynamically -->
+                                <tr>
+                                    <td colspan="4" class="text-center">Loading account data...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="explorer-content" id="validators-content">
+                    <h3>Active Validators</h3>
+                    <div class="explorer-table-container">
+                        <table class="table" id="validatorsTable">
+                            <thead>
+                                <tr>
+                                    <th>Rank</th>
+                                    <th>Validator</th>
+                                    <th>Staked DOT</th>
+                                    <th>Commission</th>
+                                    <th>Blocks Produced</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Validator data will be loaded dynamically -->
+                                <tr>
+                                    <td colspan="5" class="text-center">Loading validator data...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Smart Contract Deployment Section -->
+    <section class="section" id="deploy">
+        <div class="container">
+            <h2 class="section-title">Smart Contract Deployment</h2>
+            <p class="section-subtitle">Deploy your own smart contracts to the Polkadot network.</p>
+            
+            <div class="deployment-container">
+                <div class="row">
+                    <div class="col">
+                        <h3>Contract Deployment Steps</h3>
+                        <ol class="deployment-steps">
+                            <li>
+                                <h4>Select Network</h4>
+                                <p>Choose which Polkadot network to deploy your contract on.</p>
+                                <div class="form-group">
+                                    <label for="networkSelect" class="form-label">Network</label>
+                                    <select id="networkSelect" class="form-control">
+                                        <option value="polkadot">Polkadot Mainnet</option>
+                                        <option value="kusama">Kusama</option>
+                                        <option value="rococo">Rococo Testnet</option>
+                                        <option value="local">Local Development</option>
+                                    </select>
+                                </div>
+                            </li>
+                            <li>
+                                <h4>Connect Wallet</h4>
+                                <p>Connect your Polkadot wallet to sign the deployment transaction.</p>
+                                <button class="btn btn-primary" id="connectWalletBtn">Connect Wallet</button>
+                                <div id="walletStatus" class="mt-2" style="display: none;">
+                                    <span class="badge bg-success">Connected</span>
+                                    <span id="walletAddress"></span>
+                                </div>
+                            </li>
+                            <li>
+                                <h4>Upload Contract</h4>
+                                <p>Upload your compiled contract code or write it directly.</p>
+                                <div class="form-group">
+                                    <label for="contractType" class="form-label">Contract Type</label>
+                                    <select id="contractType" class="form-control">
+                                        <option value="ink">ink! Contract</option>
+                                        <option value="evm">EVM Contract</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="contractFile" class="form-label">Upload Contract File</label>
+                                    <input type="file" id="contractFile" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label for="contractCode" class="form-label">Or Write Contract Code</label>
+                                    <textarea id="contractCode" class="form-control" rows="10"></textarea>
+                                </div>
+                            </li>
+                            <li>
+                                <h4>Configure Deployment</h4>
+                                <p>Set deployment parameters and initial values.</p>
+                                <div class="form-group">
+                                    <label for="constructorArgs" class="form-label">Constructor Arguments</label>
+                                    <input type="text" id="constructorArgs" class="form-control" placeholder="e.g., [true, 100, &quot;initial value&quot;]">
+                                </div>
+                                <div class="form-group">
+                                    <label for="gasLimit" class="form-label">Gas Limit</label>
+                                    <input type="number" id="gasLimit" class="form-control" value="1000000">
+                                </div>
+                            </li>
+                            <li>
+                                <h4>Deploy Contract</h4>
+                                <p>Review and confirm the deployment.</p>
+                                <button class="btn btn-primary" id="deployContractBtn">Deploy Contract</button>
+                            </li>
+                        </ol>
+                    </div>
+                    <div class="col">
+                        <h3>Deployment Status</h3>
+                        <div class="deployment-status" id="deploymentStatus">
+                            <div class="status-indicator">
+                                <i class="fas fa-circle-notch fa-spin"></i>
+                                <span>Waiting for deployment...</span>
+                            </div>
+                            <div class="deployment-log" id="deploymentLog">
+                                <!-- Deployment logs will be displayed here -->
+                            </div>
+                        </div>
+                        
+                        <h3 class="mt-4">Contract Templates</h3>
+                        <p>Choose from pre-built contract templates to get started quickly.</p>
+                        <div class="contract-templates">
+                            <div class="card">
+                                <div class="card-content">
+                                    <h4 class="card-title">Token Contract</h4>
+                                    <p>A simple ERC-20 compatible token contract.</p>
+                                    <button class="btn btn-outline" data-template="token">Use Template</button>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-content">
+                                    <h4 class="card-title">NFT Collection</h4>
+                                    <p>An NFT collection contract with minting functionality.</p>
+                                    <button class="btn btn-outline" data-template="nft">Use Template</button>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-content">
+                                    <h4 class="card-title">Simple Storage</h4>
+                                    <p>A basic contract for storing and retrieving values.</p>
+                                    <button class="btn btn-outline" data-template="storage">Use Template</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- User Dashboard Section -->
+    <section class="section bg-light" id="dashboard">
+        <div class="container">
+            <h2 class="section-title">User Dashboard</h2>
+            <p class="section-subtitle">Track your learning progress and manage your deployed contracts.</p>
+            
+            <div class="dashboard-container">
+                <div class="dashboard-header">
+                    <div class="user-welcome" id="userWelcome">
+                        <h3>Welcome, <span id="dashboardUserName">User</span>!</h3>
+                        <p>Your learning journey and blockchain activities are tracked here.</p>
+                    </div>
+                    <div class="dashboard-actions">
+                        <button class="btn btn-outline" id="refreshDashboardBtn">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                        <button class="btn btn-primary" id="accountSettingsBtn">
+                            <i class="fas fa-cog"></i> Account Settings
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="dashboard-tabs">
+                    <button class="tab-button active" data-dashboard-tab="overview">Overview</button>
+                    <button class="tab-button" data-dashboard-tab="learning">Learning Progress</button>
+                    <button class="tab-button" data-dashboard-tab="contracts">My Contracts</button>
+                    <button class="tab-button" data-dashboard-tab="transactions">My Transactions</button>
+                </div>
+                
+                <div class="dashboard-content active" id="overview-content">
+                    <div class="dashboard-cards">
+                        <div class="card">
+                            <div class="card-content">
+                                <h4 class="card-title">Learning Progress</h4>
+                                <div class="progress-circle" data-progress="0" id="learningProgressCircle">
+                                    <span class="progress-text">0%</span>
+                                </div>
+                                <p>Complete modules to increase your knowledge.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-content">
+                                <h4 class="card-title">Deployed Contracts</h4>
+                                <div class="stat-number" id="contractsCount">0</div>
+                                <p>Smart contracts deployed to the network.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-content">
+                                <h4 class="card-title">Transactions</h4>
+                                <div class="stat-number" id="transactionsCount">0</div>
+                                <p>Blockchain transactions executed.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-content">
+                                <h4 class="card-title">Achievements</h4>
+                                <div class="stat-number" id="achievementsCount">0</div>
+                                <p>Learning milestones reached.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="recent-activity">
+                        <h3>Recent Activity</h3>
+                        <ul class="activity-list" id="activityList">
+                            <!-- Activity items will be loaded dynamically -->
+                            <li class="activity-item">
+                                <div class="activity-icon">
+                                    <i class="fas fa-info-circle"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <p class="activity-text">No recent activity to display.</p>
+                                    <p class="activity-time">Sign in to track your activities.</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="dashboard-content" id="learning-content">
+                    <h3>Learning Modules</h3>
+                    <div class="learning-modules" id="learningModules">
+                        <!-- Learning modules will be loaded dynamically -->
+                        <div class="module">
+                            <div class="module-header">
+                                <h4>Introduction to Polkadot</h4>
+                                <span class="module-status">Not Started</span>
+                            </div>
+                            <div class="module-progress">
+                                <div class="progress-bar" style="width: 0%"></div>
+                            </div>
+                            <div class="module-content">
+                                <p>Learn the basics of Polkadot blockchain technology.</p>
+                                <button class="btn btn-primary">Start Module</button>
+                            </div>
+                        </div>
+                        
+                        <div class="module">
+                            <div class="module-header">
+                                <h4>Polkadot Architecture</h4>
+                                <span class="module-status">Not Started</span>
+                            </div>
+                            <div class="module-progress">
+                                <div class="progress-bar" style="width: 0%"></div>
+                            </div>
+                            <div class="module-content">
+                                <p>Understand the components of Polkadot's architecture.</p>
+                                <button class="btn btn-primary">Start Module</button>
+                            </div>
+                        </div>
+                        
+                        <div class="module">
+                            <div class="module-header">
+                                <h4>Smart Contract Development</h4>
+                                <span class="module-status">Not Started</span>
+                            </div>
+                            <div class="module-progress">
+                                <div class="progress-bar" style="width: 0%"></div>
+                            </div>
+                            <div class="module-content">
+                                <p>Learn how to develop smart contracts for Polkadot.</p>
+                                <button class="btn btn-primary">Start Module</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h3 class="mt-4">Completed Quizzes</h3>
+                    <div class="completed-quizzes" id="completedQuizzes">
+                        <!-- Completed quizzes will be loaded dynamically -->
+                        <p>No quizzes completed yet.</p>
+                    </div>
+                </div>
+                
+                <div class="dashboard-content" id="contracts-content">
+                    <h3>My Deployed Contracts</h3>
+                    <div class="contracts-list" id="contractsList">
+                        <!-- Contracts will be loaded dynamically -->
+                        <p>No contracts deployed yet.</p>
+                        <button class="btn btn-primary" id="deployNewContractBtn">Deploy New Contract</button>
+                    </div>
+                </div>
+                
+                <div class="dashboard-content" id="transactions-content">
+                    <h3>My Transactions</h3>
+                    <div class="transactions-list" id="transactionsList">
+                        <!-- Transactions will be loaded dynamically -->
+                        <p>No transactions found.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <img src="assets/polkadot-logo.png" alt="Polkadot Logo" height="40">
+                    </div>
+                    <p>An educational platform for learning about Polkadot blockchain technology, PVM, and smart contract development.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3 class="footer-title">Quick Links</h3>
+                    <ul class="footer-links">
+                        <li class="footer-link"><a href="#home">Home</a></li>
+                        <li class="footer-link"><a href="#learn">Learn</a></li>
+                        <li class="footer-link"><a href="#explorer">Explorer</a></li>
+                        <li class="footer-link"><a href="#deploy">Deploy</a></li>
+                        <li class="footer-link"><a href="#dashboard">Dashboard</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3 class="footer-title">Resources</h3>
+                    <ul class="footer-links">
+                        <li class="footer-link"><a href="https://polkadot.network/" target="_blank">Polkadot Official Website</a></li>
+                        <li class="footer-link"><a href="https://wiki.polkadot.network/" target="_blank">Polkadot Wiki</a></li>
+                        <li class="footer-link"><a href="https://github.com/paritytech/polkadot" target="_blank">GitHub Repository</a></li>
+                        <li class="footer-link"><a href="https://polkadot.js.org/" target="_blank">Polkadot.js</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3 class="footer-title">Connect</h3>
+                    <ul class="footer-links">
+                        <li class="footer-link"><a href="https://twitter.com/Polkadot" target="_blank"><i class="fab fa-twitter"></i> Twitter</a></li>
+                        <li class="footer-link"><a href="https://t.me/PolkadotOfficial" target="_blank"><i class="fab fa-telegram"></i> Telegram</a></li>
+                        <li class="footer-link"><a href="https://discord.gg/wGUDt2p" target="_blank"><i class="fab fa-discord"></i> Discord</a></li>
+                        <li class="footer-link"><a href="https://www.reddit.com/r/dot/" target="_blank"><i class="fab fa-reddit"></i> Reddit</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 Polkadot Educational Platform. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <span class="modal-close" id="closeLoginModal">&times;</span>
+            <h2>Login</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail" class="form-label">Email</label>
+                    <input type="email" id="loginEmail" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword" class="form-label">Password</label>
+                    <input type="password" id="loginPassword" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Login</button>
+            </form>
+            <div class="modal-footer">
+                <p>Don't have an account? <a href="#" id="showSignupModal">Sign Up</a></p>
+                <p><a href="#" id="forgotPassword">Forgot Password?</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div class="modal" id="signupModal">
+        <div class="modal-content">
+            <span class="modal-close" id="closeSignupModal">&times;</span>
+            <h2>Sign Up</h2>
+            <form id="signupForm">
+                <div class="form-group">
+                    <label for="signupName" class="form-label">Full Name</label>
+                    <input type="text" id="signupName" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupEmail" class="form-label">Email</label>
+                    <input type="email" id="signupEmail" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupPassword" class="form-label">Password</label>
+                    <input type="password" id="signupPassword" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupConfirmPassword" class="form-label">Confirm Password</label>
+                    <input type="password" id="signupConfirmPassword" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Sign Up</button>
+            </form>
+            <div class="modal-footer">
+                <p>Already have an account? <a href="#" id="showLoginModal">Login</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+    
+    <!-- Polkadot.js API -->
+    <script src="https://cdn.jsdelivr.net/npm/@polkadot/api@9.14.1/bundle-polkadot-api.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@polkadot/extension-dapp@0.44.6/bundle-polkadot-extension-dapp.min.js"></script>
+    
+    <!-- Code Editor (Monaco) -->
+    <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.33.0/min/vs/loader.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="js/firebase/config.js"></script>
+    <script src="js/firebase/auth.js"></script>
+    <script src="js/firebase/database.js"></script>
+    <script src="js/firebase/blockchain-integration.js"></script>
+    <script src="js/framework/polkadot-connector.js"></script>
+    <script src="js/framework/blockchain-selector.js"></script>
+    <script src="js/framework/contract-deployer.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
