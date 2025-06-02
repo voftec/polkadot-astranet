@@ -1,0 +1,2238 @@
+:root {
+    /* Core Brand Colors - Ensure these are defined and used by navbar.css if needed */
+    --nasa-blue: #0a84ff;          /* Example */
+    --nasa-red: #ff3b30;           /* Example */
+    --nasa-bg: #f2f2f7;            /* Example */
+    --nasa-text: #1c1c1e;          /* Example */
+    --white: #ffffff;              /* Example */
+    --dark: #000000;               /* Example */
+    --light-gray: #d1d1d6;         /* Example */
+  
+    /* Header (Consider if these are for the general site header or specifically navbar) */
+    /* If navbar.css defines its own background/text color, these might not be needed for it */
+    --header-text: var(--white);
+    --header-bg: var(--nasa-blue);
+  
+    /* Inputs & Buttons - Check if these general button styles conflict with .navbar-right button */
+    /* --input-border: #d1d1d6; */
+    /* --input-focus: var(--nasa-blue); */
+    /* --eye-bg: #e5e5ea; */
+    /* --eye-hover: #d1d1d6; */
+  
+    /* --login-bg: var(--nasa-blue); */
+    /* --login-hover: #0060df; */
+    /* --signup-border: var(--nasa-red); */
+    /* --signup-hover: #c1271d; */
+}
+
+/* Remove dark/light mode overrides if they also redefine general button/nav styles that conflict */
+/* @media (prefers-color-scheme: dark) { :root { ... } } */
+/* @media (prefers-color-scheme: light) { :root { ... } } */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; /* Base font */
+    color: var(--nasa-text);
+    background-color: var(--nasa-bg);
+    /* z-index: 0; */ /* Generally not needed on body unless for specific stacking context reasons */
+}
+
+/* General nav styles could interfere. If you have them, make them less specific than .navbar in navbar.css */
+/* Example of a potentially interfering general style:
+nav {
+    background-color: lightgrey;
+    padding: 5px;
+}
+button {
+    background-color: grey;
+    color: white;
+}
+*/
+
+.hidden {
+    display: none !important; /* Or preferably: display: none; if !important is not strictly needed elsewhere */
+}
+
+.visible {
+    display: block !important; /* Or preferably: display: block; */
+}
+
+.hidden {
+    display: none;
+}
+  #content-container {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+  color: #1f2937;
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 12px 24px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  position: relative;
+  z-index: 1000;
+}
+
+nav#navbar .navbar-brand {
+  font-weight: bold;
+  font-size: 22px;
+  text-decoration: none;
+  color: #333333;
+  white-space: nowrap;
+}
+
+nav#navbar .navbar-brand:hover {
+  color: #1e90ff;
+}
+
+nav#navbar .navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+nav#navbar .navbar-right button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: #555555;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+  font-weight: normal;
+  white-space: nowrap;
+}
+
+nav#navbar .navbar-right button:hover {
+  color: #1e90ff;
+  background-color: #f0f0f0;
+}
+
+nav#navbar .navbar-right button.active {
+  color: #1e90ff;
+  background-color: #e6f2ff;
+}
+
+nav#navbar .nav-group {
+  position: relative;
+}
+
+nav#navbar .nav-group .nav-dropdown {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  padding: 8px 0;
+  min-width: 150px;
+  z-index: 1000;
+}
+
+nav#navbar .nav-group.open .nav-dropdown {
+  display: block;
+}
+
+nav#navbar .nav-group .nav-dropdown button {
+  width: 100%;
+  text-align: left;
+  padding: 8px 12px;
+}
+
+
+.hamburger-menu {
+  display: none;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 30px;
+  height: 25px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 15px;
+  z-index: 1001;
+}
+
+.hamburger-menu .bar {
+  display: block;
+  width: 100%;
+  height: 3px;
+  background-color: #333333;
+  border-radius: 2px;
+  transition: all 0.3s ease-in-out;
+}
+
+.hamburger-menu.active .bar:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+.hamburger-menu.active .bar:nth-child(2) {
+  opacity: 0;
+}
+.hamburger-menu.active .bar:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+
+@media (max-width: 768px) {
+  nav#navbar {
+    padding: 10px 15px;
+  }
+
+  nav#navbar .navbar-right {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: #ffffff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-top: 1px solid #e0e0e0;
+    padding: 10px 0;
+  }
+
+  nav#navbar .navbar-right.active {
+    display: flex;
+    animation: slideDown 0.3s ease-out;
+  }
+
+  nav#navbar .navbar-right button {
+    margin-left: 0;
+    margin-bottom: 5px;
+    width: 100%;
+    text-align: left;
+    padding: 12px 24px;
+    border-radius: 0;
+    font-size: 16px;
+  }
+  nav#navbar .navbar-right button:last-child {
+    margin-bottom: 0;
+  }
+
+  nav#navbar .navbar-right button:hover {
+    color: #1e90ff;
+    background-color: #f0f0f0;
+  }
+  
+  nav#navbar .navbar-right button.active {
+    background-color: #e6f2ff;
+  }
+
+  nav#navbar .nav-group .nav-dropdown {
+    position: static;
+    box-shadow: none;
+    border: 0;
+  }
+
+  .hamburger-menu {
+    display: flex;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+.page-content-landing {
+  padding-top: 20px;
+  position: relative;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  flex-grow: 1;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ================= USER / ADMIN ENHANCEMENTS =================== */
+
+#user-section {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.admin-panel,
+.admin-stats {
+  text-decoration: none;
+  color: #555;
+  font-size: 15px;
+  font-weight: 500;
+  transition: color 0.2s ease-in-out;
+}
+
+.admin-panel:hover,
+.admin-stats:hover {
+  color: #1e90ff;
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: #333;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.user-profile:hover {
+  color: #1e90ff;
+}
+
+.user-profile .avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #ddd;
+  background-color: #f3f3f3;
+}
+
+.user-profile .username {
+  font-weight: 500;
+  font-size: 15px;
+  white-space: nowrap;
+}
+
+.user-profile .admin-label {
+  background-color: #1e90ff;
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 12px;
+  text-transform: uppercase;
+  margin-left: 4px;
+  line-height: 1.2;
+}
+
+@media (max-width: 768px) {
+  #user-section {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    width: 100%;
+    padding: 12px 24px;
+  }
+
+  .admin-panel,
+  .admin-stats,
+  .user-profile {
+    width: 100%;
+    padding: 8px 0;
+    font-size: 16px;
+  }
+
+  .user-profile {
+    justify-content: flex-start;
+  }
+
+  .user-profile .avatar {
+    margin-right: 8px;
+  }
+
+  nav#navbar .nav-group {
+    width: 100%;
+  }
+
+  nav#navbar .nav-group .nav-dropdown button {
+    padding: 12px 24px;
+  }
+}
+
+/* ====== FTUE Modal Styles ====== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.modal-overlay.hidden {
+  display: none;
+}
+
+.modal-content {
+  background: var(--white, #ffffff);
+  color: var(--nasa-text, #1c1c1e);
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 460px;
+  font-family: 'Inter', sans-serif;
+}
+
+.modal-content h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.modal-content .form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+}
+
+.modal-content label {
+  margin-bottom: 6px;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.modal-content input[type="text"],
+.modal-content input[type="file"] {
+  padding: 10px;
+  border: 1px solid var(--light-gray, #d1d1d6);
+  border-radius: 4px;
+  font-size: 1rem;
+  width: 100%;
+}
+
+.modal-content button[type="submit"] {
+  margin-top: 16px;
+  padding: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  background: var(--nasa-blue, #0a84ff);
+  border: none;
+  color: var(--white, #ffffff);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out;
+}
+
+.modal-content button[type="submit"]:hover {
+  background: color-mix(in srgb, var(--nasa-blue, #0a84ff) 85%, black);
+}
+
+@media (max-width: 480px) {
+  .modal-content {
+    padding: 18px;
+    width: 95%;
+  }
+  .modal-content h3 {
+    font-size: 1.25rem;
+  }
+}
+
+.upload-area {
+  border: 2px dashed #ccc;
+  border-radius: 6px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+}
+
+.upload-area.highlight {
+  background-color: #f0f8ff;
+  border-color: #1e90ff;
+}/*
+ * PopupNotify - A lightweight, customizable notification framework
+ * Version 1.0.0
+ * 
+ * Default styling for popup notifications
+ */
+
+/* Container styles */
+.popup-notify-container {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+  z-index: 1000;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Position containers */
+.popup-notify-position {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: hidden;
+  padding: 12px;
+  box-sizing: border-box;
+}
+
+.popup-notify-top-right {
+  top: 0;
+  right: 0;
+  align-items: flex-end;
+}
+
+.popup-notify-top-left {
+  top: 0;
+  left: 0;
+  align-items: flex-start;
+}
+
+.popup-notify-bottom-right {
+  bottom: 0;
+  right: 0;
+  align-items: flex-end;
+}
+
+.popup-notify-bottom-left {
+  bottom: 0;
+  left: 0;
+  align-items: flex-start;
+}
+
+.popup-notify-top-center {
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  align-items: center;
+}
+
+.popup-notify-bottom-center {
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  align-items: center;
+}
+
+/* Notification styles */
+.popup-notify-notification {
+  width: 320px;
+  max-width: 100%;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.16), 0 3px 10px rgba(0, 0, 0, 0.23);
+  overflow: hidden;
+  pointer-events: auto;
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.popup-notify-notification.popup-notify-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.popup-notify-notification.popup-notify-closing {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+/* Bottom positions enter from bottom */
+.popup-notify-bottom-right .popup-notify-notification,
+.popup-notify-bottom-left .popup-notify-notification,
+.popup-notify-bottom-center .popup-notify-notification {
+  transform: translateY(20px);
+}
+
+.popup-notify-bottom-right .popup-notify-notification.popup-notify-visible,
+.popup-notify-bottom-left .popup-notify-notification.popup-notify-visible,
+.popup-notify-bottom-center .popup-notify-notification.popup-notify-visible {
+  transform: translateY(0);
+}
+
+.popup-notify-bottom-right .popup-notify-notification.popup-notify-closing,
+.popup-notify-bottom-left .popup-notify-notification.popup-notify-closing,
+.popup-notify-bottom-center .popup-notify-notification.popup-notify-closing {
+  transform: translateY(20px);
+}
+
+/* Content layout */
+.popup-notify-content {
+  display: flex;
+  padding: 16px;
+  align-items: flex-start;
+}
+
+.popup-notify-icon,
+.popup-notify-custom-icon {
+  flex-shrink: 0;
+  margin-right: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.popup-notify-icon svg,
+.popup-notify-custom-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.popup-notify-text-content {
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+.popup-notify-title {
+  font-weight: bold;
+  margin-bottom: 4px;
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+.popup-notify-message {
+  font-size: 14px;
+  line-height: 1.4;
+  word-wrap: break-word;
+}
+
+.popup-notify-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  line-height: 1;
+  padding: 0;
+  margin-left: 8px;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+  flex-shrink: 0;
+}
+
+.popup-notify-close:hover {
+  opacity: 1;
+}
+
+/* Action buttons */
+.popup-notify-actions {
+  display: flex;
+  padding: 8px 16px 16px;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.popup-notify-action {
+  padding: 6px 12px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.popup-notify-action:hover {
+  transform: translateY(-1px);
+}
+
+.popup-notify-action:active {
+  transform: translateY(0);
+}
+
+/* Progress bar */
+.popup-notify-progress {
+  height: 4px;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.popup-notify-progress-bar {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  animation: popup-notify-progress-animation linear forwards;
+  transform-origin: left;
+}
+
+@keyframes popup-notify-progress-animation {
+  0% {
+    transform: scaleX(1);
+  }
+  100% {
+    transform: scaleX(0);
+  }
+}
+
+/* Notification types - Light theme */
+.popup-notify-container[data-theme="light"] .popup-notify-notification {
+  background-color: #ffffff;
+  color: #333333;
+}
+
+.popup-notify-container[data-theme="light"] .popup-notify-info {
+  border-left: 4px solid #2196F3;
+}
+
+.popup-notify-container[data-theme="light"] .popup-notify-success {
+  border-left: 4px solid #4CAF50;
+}
+
+.popup-notify-container[data-theme="light"] .popup-notify-warning {
+  border-left: 4px solid #FF9800;
+}
+
+.popup-notify-container[data-theme="light"] .popup-notify-error {
+  border-left: 4px solid #F44336;
+}
+
+.popup-notify-container[data-theme="light"] .popup-notify-info .popup-notify-icon {
+  color: #2196F3;
+}
+
+.popup-notify-container[data-theme="light"] .popup-notify-success .popup-notify-icon {
+  color: #4CAF50;
+}
+
+.popup-notify-container[data-theme="light"] .popup-notify-warning .popup-notify-icon {
+  color: #FF9800;
+}
+
+.popup-notify-container[data-theme="light"] .popup-notify-error .popup-notify-icon {
+  color: #F44336;
+}
+
+.popup-notify-container[data-theme="light"] .popup-notify-action {
+  background-color: #f0f0f0;
+  color: #333333;
+}
+
+.popup-notify-container[data-theme="light"] .popup-notify-action:hover {
+  background-color: #e0e0e0;
+}
+
+.popup-notify-container[data-theme="light"] .popup-notify-info .popup-notify-progress-bar {
+  background-color: #2196F3;
+}
+
+.popup-notify-container[data-theme="light"] .popup-notify-success .popup-notify-progress-bar {
+  background-color: #4CAF50;
+}
+
+.popup-notify-container[data-theme="light"] .popup-notify-warning .popup-notify-progress-bar {
+  background-color: #FF9800;
+}
+
+.popup-notify-container[data-theme="light"] .popup-notify-error .popup-notify-progress-bar {
+  background-color: #F44336;
+}
+
+/* Notification types - Dark theme */
+.popup-notify-container[data-theme="dark"] .popup-notify-notification {
+  background-color: #333333;
+  color: #ffffff;
+}
+
+.popup-notify-container[data-theme="dark"] .popup-notify-info {
+  border-left: 4px solid #2196F3;
+}
+
+.popup-notify-container[data-theme="dark"] .popup-notify-success {
+  border-left: 4px solid #4CAF50;
+}
+
+.popup-notify-container[data-theme="dark"] .popup-notify-warning {
+  border-left: 4px solid #FF9800;
+}
+
+.popup-notify-container[data-theme="dark"] .popup-notify-error {
+  border-left: 4px solid #F44336;
+}
+
+.popup-notify-container[data-theme="dark"] .popup-notify-info .popup-notify-icon {
+  color: #2196F3;
+}
+
+.popup-notify-container[data-theme="dark"] .popup-notify-success .popup-notify-icon {
+  color: #4CAF50;
+}
+
+.popup-notify-container[data-theme="dark"] .popup-notify-warning .popup-notify-icon {
+  color: #FF9800;
+}
+
+.popup-notify-container[data-theme="dark"] .popup-notify-error .popup-notify-icon {
+  color: #F44336;
+}
+
+.popup-notify-container[data-theme="dark"] .popup-notify-close {
+  color: #ffffff;
+}
+
+.popup-notify-container[data-theme="dark"] .popup-notify-action {
+  background-color: #555555;
+  color: #ffffff;
+}
+
+.popup-notify-container[data-theme="dark"] .popup-notify-action:hover {
+  background-color: #666666;
+}
+
+.popup-notify-container[data-theme="dark"] .popup-notify-progress {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Auto theme - follows system preference */
+@media (prefers-color-scheme: dark) {
+  .popup-notify-container[data-theme="auto"] .popup-notify-notification {
+    background-color: #333333;
+    color: #ffffff;
+  }
+  
+  .popup-notify-container[data-theme="auto"] .popup-notify-close {
+    color: #ffffff;
+  }
+  
+  .popup-notify-container[data-theme="auto"] .popup-notify-action {
+    background-color: #555555;
+    color: #ffffff;
+  }
+  
+  .popup-notify-container[data-theme="auto"] .popup-notify-action:hover {
+    background-color: #666666;
+  }
+  
+  .popup-notify-container[data-theme="auto"] .popup-notify-progress {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .popup-notify-container[data-theme="auto"] .popup-notify-notification {
+    background-color: #ffffff;
+    color: #333333;
+  }
+  
+  .popup-notify-container[data-theme="auto"] .popup-notify-action {
+    background-color: #f0f0f0;
+    color: #333333;
+  }
+  
+  .popup-notify-container[data-theme="auto"] .popup-notify-action:hover {
+    background-color: #e0e0e0;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .popup-notify-notification {
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+  }
+  
+  .popup-notify-position {
+    padding: 8px;
+  }
+  
+  .popup-notify-top-center,
+  .popup-notify-bottom-center {
+    width: 100%;
+  }
+  
+  .popup-notify-top-center .popup-notify-notification,
+  .popup-notify-bottom-center .popup-notify-notification {
+    width: 100%;
+  }
+}
+
+.newsletter-container {
+    max-width: 480px;
+    margin: 60px auto;
+    padding: 24px;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
+    font-family: 'Segoe UI', sans-serif;
+    text-align: center;
+  }
+  .newsletter-container h2 {
+    font-size: 24px;
+    margin-bottom: 16px;
+  }
+.newsletter-container input[type="email"],
+.newsletter-container select,
+.newsletter-container button {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+  }
+  .newsletter-container button {
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+.newsletter-container button:hover {
+  background-color: #0056b3;
+}
+
+/* Utility class for toggling element visibility */
+.hidden {
+  display: none !important;
+}
+  /* Basic styling for the catalog page */
+.prompt-catalog-container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+}
+
+.section-title {
+    font-size: 2em;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.section-subtitle {
+    font-size: 1.1em;
+    margin-bottom: 20px;
+    color: #666;
+}
+
+#category-filters {
+    margin-bottom: 30px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+}
+
+#category-filters label {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+#category-select {
+    padding: 8px 12px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    min-width: 200px;
+}
+
+#prompts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.prompt-card {
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 15px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.prompt-card h3 {
+    font-size: 1.2em;
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #007bff; /* Using a primary color for title */
+}
+
+.prompt-card p {
+    font-size: 0.95em;
+    margin-bottom: 8px;
+    color: #555;
+}
+
+.prompt-card .prompt-text {
+    font-style: italic;
+    color: #333;
+    background-color: #f8f9fa; /* Light background for the prompt text itself */
+    padding: 10px;
+    border-radius: 4px;
+    white-space: pre-wrap; /* Preserve whitespace and newlines */
+    word-wrap: break-word; /* Break long words */
+}
+
+.prompt-card strong {
+    color: #333;
+}
+
+/* Enhanced styling reused from CreatorBay for consistency */
+.prompt-card {
+    background: var(--card);
+    border: 1px solid var(--light-grey-border, #e5e7eb);
+    border-radius: 1rem;
+    padding: 2rem;
+    max-width: 860px;
+    margin: 3rem auto;
+    box-shadow: 0 8px 24px var(--shadow, rgba(0,0,0,0.05));
+}
+
+.prompt-top {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--text, #0a0a0a);
+    gap: 1rem;
+}
+
+.prompt-body {
+    position: relative;
+    background: #fff;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    font-family: monospace;
+    white-space: pre-wrap;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    min-height: 120px;
+    color: var(--text, #0a0a0a);
+    border: 1px solid var(--medium-grey-border, #d1d5db);
+    cursor: pointer;
+}
+
+.prompt-body.tipo-increible::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(4px);
+    background-color: rgba(255, 255, 255, 0.1);
+    pointer-events: none;
+}
+
+.prompt-text-content.blurred {
+    filter: blur(4px);
+}
+
+.prompt-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-size: 0.85rem;
+    color: var(--grey-text-general, #555);
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.rating-display {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.rating-display .stars {
+    font-size: 1.2em;
+    line-height: 1;
+    color: var(--yellow, #facc15);
+}
+
+.actions button {
+    background: var(--highlight, #0057ff);
+    border: none;
+    padding: 0.6rem 1.2rem;
+    color: #fff;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.actions button:hover {
+    background: #003ecb;
+}
+/* General page setup for herramientas */
+
+
+.page-content {
+    padding-top: 80px; /* Standard padding to offset navbar, adjust if your navbar height differs */
+    padding-bottom: 40px; /* Space at the bottom */
+    min-height: calc(100vh - 80px); /* Ensure content area can fill screen */
+}
+
+.content-herramientas { 
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.tools-header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 20px 0;
+}
+
+.tools-header h1 {
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: var(--nasa-blue, #0a84ff); /* Use global variable */
+    margin-bottom: 10px;
+    line-height: 1.2;
+}
+
+.tools-header p {
+    font-size: 1.15rem;
+    color: var(--nasa-text, #5B6770);
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+#tools-list-container {
+    margin-top: 20px;
+    background-color: transparent; /* Container itself can be transparent if cards have backgrounds */
+    padding: 0; /* Remove padding if cards handle their own */
+    border-radius: 0; /* Remove border-radius if cards handle their own */
+}
+
+#tools-list-container h2 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--nasa-text, #333);
+    text-align: center;
+    margin-bottom: 30px;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+#tools-list-container h2::after { /* Underline accent for the subtitle */
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background-color: var(--nasa-red, #FC3D21); /* Use global variable */
+    border-radius: 2px;
+}
+
+/* Card-based layout for the tools list */
+#tools-list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid */
+    gap: 25px; /* Space between cards */
+}
+
+#tools-list li {
+    /* Individual card styling will be applied to the <a> tag for better clickability */
+}
+
+#tools-list li a {
+    display: block; /* Make the link a block to fill the card space */
+    background-color: var(--white, #ffffff);
+    border-radius: 12px; /* Softer, modern corners */
+    padding: 25px;
+    text-decoration: none;
+    color: var(--nasa-text, #333);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    border: 1px solid transparent; /* For hover effect */
+    height: 100%; /* Make cards in the same row equal height if needed (works with grid) */
+    display: flex; /* For aligning content within the card (e.g., icon and text) */
+    flex-direction: column;
+    justify-content: center; /* Center content vertically */
+    align-items: center; /* Center content horizontally */
+    text-align: center;
+}
+
+#tools-list li a:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
+    border-color: var(--nasa-blue, #0a84ff);
+}
+
+/* Styling for the text within the card (tool name) */
+#tools-list li a span { /* Assuming herramientas-lister.js wraps name in span, or just style 'a' */
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--nasa-blue, #0a84ff); /* Make tool name pop */
+    margin-top: 10px; /* If you add an icon above */
+}
+
+/* Placeholder for potential icons (if you update herramientas-lister.js) */
+#tools-list li a .tool-icon {
+    font-size: 2.5rem; /* Example size */
+    margin-bottom: 15px;
+    color: var(--nasa-red, #FC3D21);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .tools-header h1 {
+        font-size: 2.2rem;
+    }
+    .tools-header p {
+        font-size: 1rem;
+    }
+    #tools-list-container h2 {
+        font-size: 1.5rem;
+    }
+    #tools-list {
+        grid-template-columns: 1fr; /* Single column on smaller screens */
+        gap: 20px;
+    }
+    #tools-list li a {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .tools-header h1 {
+        font-size: 1.8rem;
+    }
+    #tools-list li a span {
+        font-size: 1.1rem;
+    }
+}#welcomeScreen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Fill the screen vertically */
+    background-color: var(--nasa-bg, #f2f2f7); /* USE GLOBAL VAR */
+}
+
+/* Login Form Container */
+.login-widget {
+    background-color: var(--white, #ffffff); /* USE GLOBAL VAR */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    max-width: 320px;
+    width: 100%;
+    font-family: 'Inter', sans-serif; /* Added for font consistency */
+}
+
+/* Labels */
+.login-widget label {
+    margin-top: 16px;
+    color: var(--nasa-text, #555555); /* USE GLOBAL VAR (or a lighter text like #555) */
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+/* Input Fields */
+.login-widget input {
+    margin-top: 8px;
+    padding: 10px;
+    border: 1px solid var(--light-gray, #d1d1d6); /* USE GLOBAL VAR */
+    border-radius: 4px;
+    font-size: 1rem;
+    width: 100%;
+    transition: border 0.3s ease-in-out;
+    background-color: var(--white, #ffffff);
+    color: var(--nasa-text, #1c1c1e);
+}
+
+.login-widget input:focus {
+    outline: none;
+    border-color: var(--nasa-blue, #0a84ff); /* USE GLOBAL VAR */
+    box-shadow: 0px 0px 5px color-mix(in srgb, var(--nasa-blue, #0a84ff) 20%, transparent); /* USE GLOBAL VAR */
+}
+
+/* Password Field Styling */
+.login-widget .password-container { /* Specificity for .login-widget */
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.login-widget .password-container input {
+    width: 100%;
+    padding: 10px;
+    padding-right: 40px; /* Make space for eye button */
+    border: 1px solid var(--light-gray, #d1d1d6); /* USE GLOBAL VAR */
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+/* Eye Button */
+.login-widget .toggle-password { /* Specificity for .login-widget */
+    position: absolute;
+    right: 5px;
+    top: 50%; /* Adjusted for better centering if input height varies slightly */
+    transform: translateY(-50%);
+    width: 30px;
+    height: 30px;
+    background: var(--light-gray, #e0e0e0); /* USE GLOBAL VAR or a light bg */
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    padding: 5px;
+    transition: background 0.3s ease-in-out;
+}
+
+.login-widget .toggle-password:hover {
+    background: #c7c7c7; /* Slightly darker gray */
+}
+
+.login-widget #eyeImg { /* Specificity for .login-widget */
+    max-width: 20px;
+    padding: 3px;
+    border-radius: 4px;
+}
+
+/* Buttons */
+.login-widget button {
+    margin-top: 16px;
+    padding: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px; /* Consistent radius */
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Login Button */
+#signInButton { /* Specificity for .login-widget */
+    background: var(--nasa-blue, #0a84ff); /* USE GLOBAL VAR */
+    color: var(--white, #ffffff); /* USE GLOBAL VAR */
+    border: 2px solid var(--nasa-blue, #0a84ff); /* USE GLOBAL VAR */
+}
+
+#signInButton:hover {
+    background: color-mix(in srgb, var(--nasa-blue, #0a84ff) 85%, black); /* Darken global blue */
+    border-color: color-mix(in srgb, var(--nasa-blue, #0a84ff) 85%, black);
+    /* color: var(--nasa-blue, #0a84ff); */ /* Keep text white or change as preferred */
+}
+
+/* Sign Up Button */
+#signUpButton { /* Specificity for .login-widget */
+    background: transparent;
+    color: var(--nasa-red, #ff3b30); /* USE GLOBAL VAR */
+    border: 2px solid var(--nasa-red, #ff3b30); /* USE GLOBAL VAR */
+}
+
+#signUpButton:hover {
+    background: var(--nasa-red, #ff3b30); /* USE GLOBAL VAR */
+    color: var(--white, #ffffff); /* USE GLOBAL VAR */
+}
+
+/* Mobile Responsive */
+@media (max-width: 480px) {
+    .login-widget {
+        max-width: 90%;
+    }
+
+    .login-widget .password-container input {
+        padding-right: 40px; /* Adjust space for the eye icon */
+    }
+
+    .login-widget .toggle-password {
+        width: 28px;
+        height: 28px;
+    }
+
+    #eyeImg {
+        max-width: 18px;
+        background-color: transparent;
+    }
+}
+
+#authScreen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 60px); /* Adjust for header height */
+    padding-top: 60px; /* Add padding for header */
+    background-color: var(--nasa-bg, #f2f2f7); /* USE GLOBAL VAR */
+    font-family: 'Inter', sans-serif; /* Set consistent font for the auth screen */
+}
+
+/* Auth Form Container (Shared Styles) */
+.auth-widget {
+    background-color: var(--white, #ffffff); /* USE GLOBAL VAR */
+    padding: 30px; /* Increased padding */
+    border-radius: 8px;
+    border: 1px solid var(--light-gray, #d1d1d6); /* USE GLOBAL VAR */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    max-width: 380px; /* Slightly wider */
+    width: 90%; /* Responsive width */
+    font-family: inherit; /* Inherit from #authScreen */
+}
+
+/* Headings */
+.auth-widget h2 {
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 25px;
+    color: var(--nasa-text, #1c1c1e); /* USE GLOBAL VAR */
+    font-weight: 600;
+}
+
+/* Labels */
+.auth-widget label {
+    margin-top: 16px;
+    color: var(--nasa-text, #555555); /* USE GLOBAL VAR (or a lighter text) */
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 8px; /* Increased margin-bottom for more space before the input */
+}
+
+/* Input Fields */
+.auth-widget input {
+    height: 44px;
+    padding: 10px 14px;
+    border: 1px solid var(--light-gray, #d1d1d6);
+    border-radius: 6px;
+    font-size: 1rem;
+    width: 100%;
+    background-color: var(--white, #ffffff);
+    color: var(--nasa-text, #1c1c1e);
+    transition: border 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    box-sizing: border-box;
+}
+
+
+.auth-widget input:focus {
+    outline: none;
+    border-color: var(--nasa-blue, #0a84ff); /* USE GLOBAL VAR */
+    box-shadow: 0px 0px 0px 3px color-mix(in srgb, var(--nasa-blue, #0a84ff) 20%, transparent); /* Adjusted focus shadow */
+}
+
+/* Password Field Styling */
+.auth-widget .password-container { /* Added .auth-widget for specificity */
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    
+}
+
+.auth-widget .password-container input {
+    /* This input inherits height, box-sizing, border, border-radius, font-size, width,
+       background-color, color, transition, padding-top, padding-bottom, and padding-left
+       from the general .auth-widget input style defined above. */
+    padding-right: 45px; /* Override only the right padding to make space for the eye icon */
+}
+
+/* Eye Button */
+.auth-widget .toggle-password { /* Added .auth-widget */
+    position: absolute;
+    right: 5px; /* Adjusted position */
+    top: 50%;   /* Center vertically */
+    transform: translateY(-50%);
+    width: 32px; /* Adjusted size */
+    height: 32px; /* Adjusted size */
+    background: transparent; /* Cleaner look */
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid transparent; /* Added transparent border */
+    padding: 5px;
+    transition: background 0.3s ease-in-out, border-color 0.3s ease-in-out;
+}
+
+.auth-widget .toggle-password:hover {
+    background: color-mix(in srgb, var(--light-gray, #d1d1d6) 30%, transparent); /* Subtle hover */
+}
+
+.auth-widget .toggle-password img { /* Added .auth-widget */
+    max-width: 20px;
+    height: auto; /* Maintain aspect ratio */
+    opacity: 0.6; /* Slightly dim */
+    transition: opacity 0.3s ease;
+}
+.auth-widget .toggle-password:hover img { /* Added .auth-widget */
+    opacity: 1; /* Full opacity on hover */
+}
+
+/* Buttons */
+.auth-widget .auth-button { /* Shared button class */
+    margin-top: 25px; /* Increased margin */
+    padding: 12px 20px; /* Slightly more horizontal padding */
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px; /* Consistent radius */
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    line-height: 1.2; /* Ensure text is centered well */
+}
+
+/* Primary Button Style (Login/Sign Up) */
+.auth-widget .auth-button.primary { /* Added .auth-widget */
+    background: var(--nasa-blue, #0a84ff); /* USE GLOBAL VAR */
+    color: var(--white, #ffffff); /* USE GLOBAL VAR */
+    border: 2px solid var(--nasa-blue, #0a84ff); /* USE GLOBAL VAR */
+}
+
+.auth-widget .auth-button.primary:hover { /* Added .auth-widget */
+    background: color-mix(in srgb, var(--nasa-blue, #0a84ff) 85%, black); /* Darken global blue */
+    border-color: color-mix(in srgb, var(--nasa-blue, #0a84ff) 85%, black);
+}
+
+/* Secondary/Switch Auth Styles */
+.auth-widget .switch-auth { /* Added .auth-widget */
+    margin-top: 20px;
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--nasa-text, #1c1c1e); /* USE GLOBAL VAR */
+}
+
+.auth-widget .switch-auth a { /* Added .auth-widget */
+    color: var(--nasa-blue, #0a84ff); /* USE GLOBAL VAR for links */
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.auth-widget .switch-auth a:hover { /* Added .auth-widget */
+    color: color-mix(in srgb, var(--nasa-blue, #0a84ff) 85%, black); /* Darken link on hover */
+    text-decoration: underline;
+}
+
+/* Utility class to hide elements */
+.hidden {
+    display: none;
+}
+
+/* Mobile Responsive */
+@media (max-width: 480px) {
+    .auth-widget {
+        max-width: 90%;
+        padding: 20px; /* Adjust padding */
+    }
+
+    .auth-widget .password-container input {
+        padding-right: 40px; /* Adjust space for the eye icon */
+    }
+
+    .auth-widget .toggle-password {
+        width: 30px; /* Adjust size */
+        height: 30px; /* Adjust size */
+    }
+
+    .auth-widget .toggle-password img {
+        max-width: 18px;
+    }
+}
+
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px; 
+}
+
+.success-message {
+    color: green;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+/* Styling for password strength indicator (Optional)  */
+.password-strength {
+  height: 5px;
+  margin-top: 5px;
+  background-color: #ddd;
+  width: 100%;
+}
+
+.strength-weak { width: 33%; background-color: #f00; }
+.strength-medium { width: 66%; background-color: #ffa500; }
+.strength-strong { width: 100%; background-color: #0f0; }/* Blog Container - Adjusted for wider layout */
+.blog-container {
+    width: 100%; /* Full width by default */
+    max-width: 900px; /* Slightly adjusted for a comfortable reading width for entries */
+    margin: 20px auto 40px; /* Adjusted top margin, added more bottom margin */
+    padding: 20px; /* Reduced padding if entries have their own */
+    background: transparent; /* Make container transparent if entries have their own background */
+    border-radius: 8px;
+    box-sizing: border-box; /* Ensures padding is included in width calculation */
+    /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.05); */ /* Shadow might be better on individual entries */
+}
+
+/* Blog Title */
+.blog-container h1 {
+    text-align: center;
+    font-size: 2.5em; /* Slightly larger */
+    font-weight: 600; /* Bolder */
+    margin-top: 0; /* Consistent top margin if padding handles it */
+    margin-bottom: 40px; /* Increased spacing */
+    color: #2c3e50; /* Darker, more professional blue/grey */
+}
+
+/* Individual Blog Entries Styling */
+.entry {
+    width: 100%;
+    box-sizing: border-box;
+    left: 0px; /* This was in your original CSS */
+    background: #ffffff; /* White background for each entry card */
+    padding: 25px 30px; /* Default padding for desktop and larger screens */
+    margin-bottom: 25px; /* Space between entries */
+    border-radius: 8px; /* Rounded corners for the card */
+    border: 1px solid #e0e0e0; /* Softer border */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* More pronounced shadow for depth */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for hover */
+    cursor: default; /* Change cursor if the whole card is not clickable */
+}
+
+.entry:hover {
+    transform: translateY(-5px); /* Slight lift on hover */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12); /* Enhanced shadow on hover */
+    /* background-color: #f8f9fa; */ /* Removed, keep background white on hover for cleaner look */
+}
+
+.entry h2 { /* Entry Title */
+    margin: 0 0 10px 0; /* Adjusted space below title */
+    font-size: 1.75em; /* Larger title for emphasis */
+    font-weight: 600;
+    color: #34495e; /* Professional dark blue */
+    line-height: 1.3;
+}
+
+.entry h2 a { /* If your title is a link */
+    text-decoration: none;
+    color: inherit;
+    transition: color 0.3s ease;
+}
+
+.entry h2 a:hover {
+    color: var(--nasa-blue, #0a84ff); /* Use brand color from globalstyle.css if defined */
+}
+
+.entry .timestamp { /* Timestamp/Date */
+    color: #7f8c8d; /* Muted grey for metadata */
+    font-size: 0.85em;
+    font-weight: 400;
+    margin-bottom: 15px; /* Space below timestamp */
+    display: block; /* Ensure it takes its own line */
+}
+
+.entry .summary { /* Summary/Snippet Text */
+    color: #555;
+    font-size: 1em;
+    line-height: 1.7;
+    margin-bottom: 20px;
+    word-wrap: break-word; /* Helps prevent layout breaks from long words */
+}
+
+.entry .read-more-link { /* "Read More" Link */
+    display: inline-block;
+    font-size: 0.95em;
+    font-weight: 600;
+    color: var(--nasa-blue, #0a84ff); /* Use brand color */
+    text-decoration: none;
+    padding: 8px 15px;
+    border: 1px solid var(--nasa-blue, #0a84ff);
+    border-radius: 20px; /* Pill shape */
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.entry .read-more-link:hover {
+    background-color: var(--nasa-blue, #0a84ff);
+    color: #ffffff;
+}
+
+
+/* Pagination */
+.pagination {
+    text-align: center; /* Suggestion: Center pagination */
+    margin-top: 30px;   /* Suggestion: Space above pagination */
+    /* If you have more specific styles for pagination, they would go here or replace these suggestions */
+}
+
+.pagination button {
+    padding: 8px 16px; /* Suggestion: Base padding */
+    margin: 0 5px;     /* Suggestion: Spacing between buttons */
+    font-size: 0.9em;  /* Suggestion: Base font size */
+    color: #333; /* Example text color */
+    background-color: #f0f0f0; /* Example background color */
+    border: 1px solid #ccc; /* Example border */
+    border-radius: 4px; /* Example border radius */
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    /* If you have more specific styles for pagination buttons, they would go here */
+}
+
+.pagination button:hover {
+    background-color: #e0e0e0; /* Example hover background color */
+    /* Your specific hover styles */
+}
+
+.pagination button:disabled {
+    cursor: not-allowed; /* Suggestion */
+    opacity: 0.6;        /* Suggestion */
+    background-color: #f9f9f9; /* Example disabled background */
+    color: #aaa; /* Example disabled text color */
+    border-color: #ddd; /* Example disabled border color */
+    /* Your specific disabled styles */
+}
+
+/* Floating button for creating posts */
+.floating-button {
+    position: fixed;    /* Common styling for FAB */
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    background-color: var(--nasa-blue, #0a84ff); /* Example background color */
+    color: white; /* Example text/icon color */
+    border-radius: 50%;
+    font-size: 24px;
+    line-height: 50px;  /* Vertically center text/icon */
+    text-align: center; /* Horizontally center text/icon */
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2); /* Example shadow */
+    border: none;
+    cursor: pointer;
+    z-index: 100; /* Ensure it's above other content */
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    /* Your specific floating button styles */
+}
+
+.floating-button:hover {
+    background-color: color-mix(in srgb, var(--nasa-blue, #0a84ff) 85%, black); /* Example darker hover */
+    transform: scale(1.05); /* Example hover effect */
+    /* Your specific hover styles */
+}
+
+/* --- Responsive Design Adjustments --- */
+
+/* Medium screens (e.g., Tablets) - Your existing media query with refinements */
+@media (max-width: 768px) {
+    .blog-container {
+        padding: 15px; /* Adjust padding for the main container */
+        margin: 20px 15px 30px; /* Adjust margins for better screen use */
+        max-width: none; /* Allow it to use more width */
+    }
+
+    .blog-container h1 {
+        font-size: 2em; /* Slightly smaller blog title */
+        margin-bottom: 30px;
+    }
+
+    .entry {
+        padding: 20px; /* Adjust padding for entries on tablets */
+    }
+
+    .entry h2 {
+        font-size: 1.5em; /* Smaller entry titles */
+    }
+
+    .entry .summary {
+        font-size: 0.95em; /* Slightly smaller summary text */
+        line-height: 1.65; /* Adjusted line height for readability */
+    }
+
+    .entry .read-more-link {
+        font-size: 0.9em;
+        padding: 7px 14px; /* Slightly adjusted padding */
+    }
+
+    .pagination button {
+        padding: 7px 12px;
+        font-size: 0.85em;
+    }
+
+    .floating-button {
+        width: 48px;
+        height: 48px;
+        line-height: 48px;
+        font-size: 22px;
+        bottom: 18px;
+        right: 18px;
+    }
+}
+
+/* Smaller screens (e.g., Mobile phones) - Additional media query for finer control */
+@media (max-width: 480px) {
+    .blog-container {
+        padding: 10px; /* Further reduce padding */
+        margin: 15px 10px 25px; /* Further adjust margins */
+    }
+
+    .blog-container h1 {
+        font-size: 1.75em; /* Even smaller blog title */
+        margin-bottom: 25px;
+    }
+
+    .entry {
+        padding: 15px; /* Smaller padding for entry cards */
+        margin-bottom: 20px;
+    }
+
+    .entry h2 {
+        font-size: 1.3em; /* Smaller entry titles */
+        line-height: 1.35;
+    }
+
+    .entry .timestamp {
+        font-size: 0.8em;
+        margin-bottom: 10px;
+    }
+
+    .entry .summary {
+        font-size: 0.9em;
+        line-height: 1.6;
+        margin-bottom: 15px;
+    }
+
+    .entry .read-more-link {
+        font-size: 0.85em;
+        padding: 10px 12px; /* Increased vertical padding for easier tapping */
+        width: 100%; /* Make button full width for easier tapping */
+        box-sizing: border-box;
+        text-align: center;
+    }
+
+    .pagination button {
+        padding: 6px 10px;
+        font-size: 0.8em; /* Smaller pagination buttons */
+        margin: 0 3px;
+    }
+
+    .floating-button {
+        width: 45px;
+        height: 45px;
+        line-height: 45px;
+        font-size: 20px;
+        bottom: 15px;
+        right: 15px;
+    }
+}
+.page-content {
+  padding-top: 20px; /* Adjusted from 80px, fine-tune as needed */
+  position: relative;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  flex-grow: 1; /* Added for sticky footer */
+  width: 100%; /* Ensure page-content takes available width */
+  box-sizing: border-box; /* Include padding in width calculation */
+}
+
+h1 {
+  text-align: center;
+  font-size: 2.25rem;
+  margin: 2rem 0 0.5rem;
+  font-weight: 700;
+  background: linear-gradient(to right, #3b82f6, #9333ea);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+  text-align: center;
+  font-size: 1.125rem;
+  color: #4b5563;
+  margin-bottom: 1.5rem; /* Adjusted margin for search bar */
+}
+
+/* Keep SEO text accessible but hidden visually */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Search Bar Styles */
+.search-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2.5rem; /* Space below search bar */
+  padding: 0 1rem; /* Padding for smaller screens */
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 600px; /* Max width for the search bar */
+  background-color: #fff;
+  border-radius: 8px; /* Rounded corners for the container */
+  padding: 0.25rem 0.5rem; /* Reduced padding to make it tighter */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e2e8f0;
+}
+
+.search-bar input {
+  flex-grow: 1;
+  border: none;
+  outline: none;
+  padding: 0.6rem 0.5rem; /* Adjusted padding */
+  font-size: 1rem;
+  color: #374151;
+  background-color: transparent;
+}
+
+.search-bar input::placeholder {
+  color: #9ca3af;
+}
+
+.search-icon {
+  width: 20px;
+  height: 20px;
+  margin-left: 0.25rem; /* Space to the left of icon */
+  margin-right: 0.5rem; /* Space between icon and input */
+  fill: #6b7280; /* Icon color */
+}
+
+.search-button {
+  background-color: #3b82f6; /* Blue background */
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem; /* Padding for the button */
+  border-radius: 6px; /* Rounded corners for the button */
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-left: 0.5rem; /* Space between input and button */
+}
+
+.search-button:hover:not(:disabled) {
+  background-color: #2563eb; /* Darker blue on hover */
+}
+
+.search-button:disabled {
+  background-color: #9ca3af; /* Grey background when disabled */
+  cursor: not-allowed;
+}
+/* End Search Bar Styles */
+
+.columns {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  align-items: stretch; /* Ensures columns in a row have the same height */
+  margin-bottom: 2rem; /* Add some space before the footer */
+}
+
+.column {
+  background-color: #ffffff;
+  flex: 1 1 300px; /* Flex properties for responsiveness */
+  padding: 1.5rem;
+  border-radius: 1rem; /* Rounded corners */
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08); /* Softer shadow */
+  border: 1px solid #e2e8f0; /* Light border */
+  max-height: 600px; /* Max height for scrollable content */
+  overflow-y: auto; /* Enable vertical scroll if content overflows */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex; /* Make column a flex container */
+  flex-direction: column; /* Stack children vertically */
+}
+
+/* Removed specific margin from .column#news to ensure uniform spacing */
+/* .column#news {
+    margin-bottom: 2rem; 
+} */
+
+.column:hover {
+  transform: translateY(-6px); /* Subtle lift effect on hover */
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12); /* Enhanced shadow on hover */
+}
+
+.column h2 {
+  text-align: center;
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: #111827; /* Darker heading color */
+  border-bottom: 2px solid #3b82f6; /* Accent border */
+  padding-bottom: 0.5rem;
+}
+
+.prompt-item {
+  font-size: 0.95rem;
+  padding: 0.75rem 0.25rem;
+  border-bottom: 1px solid #e5e7eb; /* Lighter separator */
+  transition: background-color 0.2s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.prompt-item:last-child {
+  border-bottom: none; /* Remove border for the last item */
+}
+
+.prompt-item:hover {
+  background-color: #f3f4f6; /* Subtle hover background */
+}
+.prompt-item span {
+  flex-grow: 1; /* Allow text to take available space */
+  margin-right: 1rem; /* Space before copy button */
+}
+
+.copy-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 50%; /* Circular button */
+  transition: background-color 0.2s;
+}
+.copy-button:hover {
+  background-color: rgba(0,0,0,0.1); /* Slight background on hover */
+}
+
+.copy-icon {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
+/* Footer Styles */
+.page-footer {
+  text-align: center;
+
+  margin-top: auto; /* Pushes footer to bottom if content is short */
+  background-color: #f1f5f9; /* Light background color for footer */
+  color: #4b5563; /* Text color for footer */
+  border-top: 1px solid #e5e7eb; /* Separator line */
+  font-size: 0.9rem;
+  width: 100%; /* Footer spans full width */
+  box-sizing: border-box; /* Include padding in width calculation */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .search-bar {
+    padding: 0.2rem 0.4rem; /* Adjust padding for smaller screens */
+  }
+  .search-bar input {
+    font-size: 0.9rem; /* Adjust font size for smaller screens */
+    padding: 0.5rem 0.4rem;
+  }
+  .search-icon {
+    width: 18px;
+    height: 18px;
+  }
+  .search-button {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+  }
+   .columns {
+    gap: 1.5rem; /* Reduce gap on smaller screens */
+  }
+  .column {
+    flex-basis: calc(100% - 2rem); /* Make columns take more width on small screens */
+  }
+}
+
+/* Ensure navbar-right is correctly displayed on larger screens */
+@media (min-width: 769px) {
+}
+
+/* Animation for mobile menu dropdown */
+@keyframes slideDown {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+.featured-tool {
+  position: relative;
+  margin-top: 48px;
+  padding: 40px 32px;
+  border-radius: 24px;
+  background: linear-gradient(135deg, #4a00e0, #8e2de2);
+  color: white;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  text-align: left;
+  min-height: 220px;
+  isolation: isolate;
+}
+
+.featured-tool::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url('https://ik.imagekit.io/promptsincreibles/abstract_background_1170x200%202.png') center/cover no-repeat;
+  opacity: 0.15;
+  z-index: 0;
+}
+
+.featured-tool h2 {
+  font-size: 2.25rem; /* ≈36px */
+  font-weight: 800;
+  margin: 0;
+  z-index: 1;
+  line-height: 1.2;
+}
+
+.featured-tool p {
+  font-size: 1.125rem;
+  margin: 12px 0 24px;
+  z-index: 1;
+  max-width: 600px;
+}
+
+.featured-tool a.button {
+  background: #ffffff;
+  color: #4a00e0;
+  font-weight: 600;
+  padding: 12px 24px;
+  border-radius: 12px;
+  text-decoration: none;
+  font-size: 1rem;
+  z-index: 1;
+  transition: background 0.2s ease;
+}
+
+.featured-tool a.button:hover {
+  background: #f0f0f0;
+}
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+.accordion-header-button {
+    transition: background-color 0.3s ease;
+}
+
+.accordion-header-button:hover {
+    background-color: rgba(51, 65, 85, 0.7); /* slate-700 with a bit more opacity or a slightly different shade */
+}
+
+/* Custom focus style for accordion headers for keyboard navigation */
+.accordion-header-button:focus-visible {
+    outline: 2px solid #ec4899; /* pink-500 */
+    outline-offset: 2px;
+    background-color: rgba(51, 65, 85, 0.6); /* Slightly highlight background on focus */
+    border-radius: 0.125rem; /* Slight rounding to match typical button styles if needed */
+}
+/* Remove default outline for focus if :focus-visible is supported and used */
+.accordion-header-button:focus {
+    outline: none;
+}
+
+
+.accordion-content {
+    overflow: hidden;
+    transition: max-height 0.5s cubic-bezier(0.25, 0.1, 0.25, 1), opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+    max-height: 0;
+    opacity: 0;
+    visibility: hidden; /* Add visibility for better accessibility */
+}
+
+.accordion-content.open {
+    max-height: 2000px; 
+    opacity: 1;
+    visibility: visible;
+}
+
+.source-link {
+    transition: color 0.2s ease-in-out, transform 0.2s ease-in-out;
+    display: inline-block;
+}
+
+.source-link:hover {
+    color: #ec4899; /* Tailwind pink-500 */
+    transform: translateY(-1px);
+}
+
+.highlight-bar {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.375rem;
+    font-weight: 600;
+    background-image: linear-gradient(to right, #ec4899, #d946ef); /* pink-500 to fuchsia-500 */
+    color: white;
+    box-shadow: 0 4px 14px 0 rgba(236, 72, 153, 0.39);
+}
+
+.fade-in {
+    animation: fadeInAnimation 0.5s ease-in-out;
+}
+
+@keyframes fadeInAnimation {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #1e293b; /* slate-800 */
+}
+
+::-webkit-scrollbar-thumb {
+    background: #4a5568; /* slate-600 */
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #ec4899; /* pink-500 */
+}
