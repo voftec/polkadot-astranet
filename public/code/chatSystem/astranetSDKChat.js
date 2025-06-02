@@ -27,20 +27,21 @@ function generateLightweightID(length = 13) {
   return id;
 }
 
-export async function startNewChatWithUser(partnerUid) {
+export async function startNewChatWithUser(partnerUid, chatName = 'Nuevo chat') {
   const user = auth.currentUser;
   if (!user) throw new Error("Not logged in");
 
   const chatID = generateLightweightID();
   const sessionData = {
+    name: chatName,
     participants: { [user.uid]: true, [partnerUid]: true },
     messages: {},
     createdAt: Date.now()
   };
 
   // Store the session under both users
-  await set(ref(db, `users/${user.uid}/chatSessions/${chatID}`), sessionData);
-  await set(ref(db, `users/${partnerUid}/chatSessions/${chatID}`), sessionData);
+  await set(ref(db, `users/${user.uid}/chatHistory/${chatID}`), sessionData);
+  await set(ref(db, `users/${partnerUid}/chatHistory/${chatID}`), sessionData);
 
   return chatID;
 }
@@ -57,8 +58,8 @@ export async function sendMessageToChat(chatID, text, partnerUid) {
   };
 
   // Add message to both users' chatSessions
-  const msgRefA = push(ref(db, `users/${user.uid}/chatSessions/${chatID}/messages`));
-  const msgRefB = push(ref(db, `users/${partnerUid}/chatSessions/${chatID}/messages`));
+  const msgRefA = push(ref(db, `users/${user.uid}/chatHistory/${chatID}/messages`));
+  const msgRefB = push(ref(db, `users/${partnerUid}/chatHistory/${chatID}/messages`));
   await set(msgRefA, msg);
   await set(msgRefB, msg);
 }
@@ -66,7 +67,7 @@ export async function sendMessageToChat(chatID, text, partnerUid) {
 export async function loadUserChatList() {
   const user = auth.currentUser;
   if (!user) return [];
-  const snapshot = await get(ref(db, `users/${user.uid}/chatSessions`));
+  const snapshot = await get(ref(db, `users/${user.uid}/chatHistory`));
   if (!snapshot.exists()) return [];
   return Object.entries(snapshot.val()).map(([chatID, data]) => ({ chatID, ...data }));
 }
@@ -74,7 +75,7 @@ export async function loadUserChatList() {
 export function listenForMessages(chatID, onMessage) {
   const user = auth.currentUser;
   if (!user) throw new Error("Not logged in");
-  const messagesRef = ref(db, `users/${user.uid}/chatSessions/${chatID}/messages`);
+  const messagesRef = ref(db, `users/${user.uid}/chatHistory/${chatID}/messages`);
   onChildAdded(messagesRef, (snapshot) => {
     onMessage(snapshot.key, snapshot.val());
   });

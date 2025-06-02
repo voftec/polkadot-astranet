@@ -84,8 +84,8 @@
         createdAt: Date.now()
       });
 
-      // Add session to user's chatSessions
-      await update(ref(db, `users/${user.uid}/chatSessions`), { [sessionUID]: true });
+      // Add session to user's chatHistory
+      await update(ref(db, `users/${user.uid}/chatHistory`), { [sessionUID]: true });
 
       return sessionUID;
     }
@@ -99,15 +99,15 @@
         [user.uid]: { wallet: walletAddress, blocked: false }
       });
 
-      // Add session to user's chatSessions
-      await update(ref(db, `users/${user.uid}/chatSessions`), { [sessionUID]: true });
+        // Add session to user's chatHistory
+        await update(ref(db, `users/${user.uid}/chatHistory`), { [sessionUID]: true });
     }
 
     async function sendMessage(sessionUID, text, sender = null) {
       const user = auth.currentUser;
       if (!user && !sender) throw new Error("Not logged in");
 
-      const msgRef = push(ref(db, `chatSessions/${sessionUID}/messages`));
+      const msgRef = push(ref(db, `users/${user.uid}/chatHistory/${sessionUID}/messages`));
       await set(msgRef, {
         sender: sender || user.uid,
         text,
@@ -117,7 +117,7 @@
     }
 
     function listenForMessages(sessionUID, onMessage) {
-      const messagesRef = ref(db, `chatSessions/${sessionUID}/messages`);
+      const messagesRef = ref(db, `users/${auth.currentUser.uid}/chatHistory/${sessionUID}/messages`);
       onChildAdded(messagesRef, (snapshot) => {
         onMessage(snapshot.val());
       });
@@ -127,22 +127,22 @@
       const user = auth.currentUser;
       if (!user) throw new Error("Not logged in");
 
-      const messagesRef = ref(db, `chatSessions/${sessionUID}/messages`);
+      const messagesRef = ref(db, `users/${user.uid}/chatHistory/${sessionUID}/messages`);
       const snapshot = await get(messagesRef);
       snapshot.forEach(child => {
         const msgKey = child.key;
-        update(ref(db, `chatSessions/${sessionUID}/messages/${msgKey}/readBy`), {
+        update(ref(db, `users/${user.uid}/chatHistory/${sessionUID}/messages/${msgKey}/readBy`), {
           [user.uid]: true
         });
       });
     }
 
     async function kickUserFromSession(sessionUID, targetUid) {
-      await update(ref(db, `chatSessions/${sessionUID}/participants/${targetUid}`), { blocked: true });
+      await update(ref(db, `users/${auth.currentUser.uid}/chatHistory/${sessionUID}/participants/${targetUid}`), { blocked: true });
     }
 
     async function removeChatSession(sessionUID) {
-      await set(ref(db, `chatSessions/${sessionUID}`), null);
+      await set(ref(db, `users/${auth.currentUser.uid}/chatHistory/${sessionUID}`), null);
     }
 
     let currentSessionUID = null;
@@ -176,7 +176,7 @@
 
     function checkForUnread(sessionUID) {
       const user = auth.currentUser;
-      const messagesRef = ref(db, `chatSessions/${sessionUID}/messages`);
+      const messagesRef = ref(db, `users/${user.uid}/chatHistory/${sessionUID}/messages`);
       get(messagesRef).then(snapshot => {
         let hasUnread = false;
         snapshot.forEach(child => {
